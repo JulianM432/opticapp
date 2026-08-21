@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import routes from '../routes/index.js';
+import { requestLogger } from '../middlewares/requestLogger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +21,7 @@ export const createApp = (): Express => {
     }),
   );
   app.use(cookieParser());
+  app.use(requestLogger);
   app.use(
     '/uploads',
     express.static(path.join(__dirname, '..', '..', 'uploads')),
