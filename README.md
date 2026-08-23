@@ -4,6 +4,20 @@ Interfaz web pública de **Opticapp**, vidriera de catálogo de armazones para u
 
 Repositorio backend: [opticapp-back](https://github.com/JulianM432/opticapp-back)
 
+## Spec-Driven Development (SDD)
+
+Este repo incluye su propia documentación de specs y reglas de Cursor:
+
+| Recurso | Descripción |
+|---------|-------------|
+| [SPECS.md](SPECS.md) | Etapa activa y visión del frontend |
+| [specs/](specs/) | Constitución, arquitectura, UI/tema, etapas |
+| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + frontend) |
+
+**Cursor (desktop / iOS / cloud):** abrir **este directorio** como workspace (`opticapp-front`), no la carpeta contenedora `opticapp/`.
+
+Al avanzar de etapa, actualizar `SPECS.md` también en el repo backend para mantener la tabla sincronizada.
+
 ## Stack
 
 | Capa | Tecnología |
@@ -55,7 +69,9 @@ Ver [.env.example](.env.example):
 ## Estructura de archivos
 
 ```
-frontend/
+├── SPECS.md
+├── specs/
+├── .cursor/rules/
 ├── public/
 │   ├── logo.svg              # Logo Opticapp (lentes)
 │   └── favicon.ico
