@@ -4,6 +4,20 @@ API REST para **Opticapp**, plataforma vidriera de catálogo de armazones para u
 
 Repositorio frontend: [opticapp-front](https://github.com/JulianM432/opticapp-front)
 
+## Spec-Driven Development (SDD)
+
+Este repo incluye su propia documentación de specs y reglas de Cursor:
+
+| Recurso | Descripción |
+|---------|-------------|
+| [SPECS.md](SPECS.md) | Etapa activa y visión del backend |
+| [specs/](specs/) | Constitución, arquitectura, modelo de datos, etapas |
+| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + backend) |
+
+**Cursor (desktop / iOS / cloud):** abrir **este directorio** como workspace (`opticapp-back`), no la carpeta contenedora `opticapp/`.
+
+Al avanzar de etapa, actualizar `SPECS.md` también en el repo frontend para mantener la tabla sincronizada.
+
 ## Stack
 
 | Capa | Tecnología |
@@ -56,7 +70,9 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 ## Estructura de archivos
 
 ```
-backend/
+├── SPECS.md
+├── specs/
+├── .cursor/rules/
 ├── src/
 │   ├── index.ts              # Entry point
 │   ├── configs/
