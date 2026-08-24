@@ -42,8 +42,8 @@ API REST para **Opticapp**, plataforma vidriera de catálogo de armazones. Sin e
 |---|-------|------|--------|
 | 0 | Documentación SDD | *(esta iteración)* | `hecha` |
 | 1 | Bootstrap repos | [01-bootstrap.md](specs/stages/01-bootstrap.md) | `hecha` |
-| 2 | Catálogo público + uploads | [02-public-catalog.md](specs/stages/02-public-catalog.md) | `activa` |
-| 3 | Auth admin | [03-admin-auth.md](specs/stages/03-admin-auth.md) | `pendiente` |
+| 2 | Catálogo público + uploads | [02-public-catalog.md](specs/stages/02-public-catalog.md) | `hecha` |
+| 3 | Auth admin | [03-admin-auth.md](specs/stages/03-admin-auth.md) | `activa` |
 | 4 | CRUD productos admin | [04-admin-products.md](specs/stages/04-admin-products.md) | `pendiente` |
 | 5 | WhatsApp CTA | [05-whatsapp-cta.md](specs/stages/05-whatsapp-cta.md) | `pendiente` |
 | 6 | Import CSV/Excel | [06-import-csv.md](specs/stages/06-import-csv.md) | `pendiente` |

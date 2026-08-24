@@ -27,8 +27,9 @@ Al avanzar de etapa, actualizar `SPECS.md` también en el repo frontend para man
 | Lenguaje | TypeScript (strict) |
 | Framework HTTP | Express |
 | Base de datos | MongoDB + Mongoose |
-| Validación HTTP | Zod (etapas futuras) |
+| Validación HTTP | Zod |
 | Auth | JWT + cookie httpOnly (etapas futuras) |
+| Uploads | Multer (imágenes en disco, URL en MongoDB) |
 | Lint / formato | ESLint flat + Prettier |
 
 ## Requisitos
@@ -56,6 +57,7 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 | `PORT` | Puerto del servidor (default `3000`) |
 | `MONGODB_URI` | URI de conexión MongoDB |
 | `CLIENT_URL` | Origen del frontend para CORS |
+| `UPLOADS_BASE_URL` | Base pública de imágenes (seed) |
 | `JWT_SECRET` | Secreto JWT (etapas futuras) |
 
 ## Scripts
@@ -66,6 +68,7 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 | `pnpm build` | Compila TypeScript a `dist/` |
 | `pnpm start` | Ejecuta build de producción |
 | `pnpm lint` | ESLint sobre `src/` |
+| `pnpm seed:products` | Carga 5 armazones publicados de ejemplo |
 
 ## Estructura de archivos
 
@@ -77,13 +80,19 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 │   ├── index.ts              # Entry point
 │   ├── configs/
 │   │   ├── app.ts            # Express: JSON, CORS, cookies, static /uploads
-│   │   └── db.ts             # Conexión Mongoose
+│   │   ├── db.ts             # Conexión Mongoose
+│   │   └── multer.ts         # Destino, nombre y límites de upload
 │   ├── routes/               # Routers HTTP (sin prefijo /api)
-│   ├── controllers/          # Handlers (etapas futuras)
-│   ├── services/             # Lógica de negocio (etapas futuras)
-│   ├── models/               # Schemas Mongoose (etapas futuras)
+│   ├── controllers/          # Handlers flacos
+│   ├── services/             # Lógica de negocio
+│   ├── models/               # Schemas Mongoose
+│   ├── validations/          # Schemas Zod
 │   ├── middlewares/
-│   │   └── errorHandler.ts   # Errores → { message } en español
+│   │   ├── errorHandler.ts   # Errores → { message } en español
+│   │   ├── requestLogger.ts  # Log de requests HTTP
+│   │   └── upload.ts         # Middleware Multer (uso admin en etapa 4)
+│   ├── scripts/
+│   │   └── seed-products.ts  # Seed opcional del catálogo público
 │   ├── errors/
 │   │   └── AppError.ts       # Errores operacionales tipados
 │   └── utils/
@@ -96,10 +105,13 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 └── tsconfig.json
 ```
 
-## Endpoints (bootstrap)
+## Endpoints
 
 | Método | Ruta | Respuesta |
 |--------|------|-----------|
 | `GET` | `/health` | `{ status: "ok" \| "degraded", mongodb: "connected" \| "disconnected" }` |
+| `GET` | `/products?page=&limit=` | Catálogo paginado (`items`, `total`, `page`, `limit`, `totalPages`). Defaults: `page=1`, `limit=12`. Solo publicados y no eliminados. |
+| `GET` | `/products/:id` | Detalle público. Id inválido → 400. No publicado, soft-deleted o inexistente → 404. |
+| `GET` | `/uploads/...` | Archivos estáticos de imágenes |
 
-Las rutas **no** usan prefijo `/api`.
+Las rutas **no** usan prefijo `/api`. El payload de éxito va directo en `res.json` (sin wrapper `{ data }`). Cada producto expone `id` y nunca `_id`.
