@@ -17,7 +17,8 @@ const start = async (): Promise<void> => {
   }
 
   app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    // console.log(`Server running on http://localhost:${port}`);
+    console.log(`Server running on http://192.168.0.100:${port}`);
   });
 };
 
