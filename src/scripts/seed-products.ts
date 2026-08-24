@@ -72,7 +72,11 @@ const seed = async (): Promise<void> => {
   await connectDb();
 
   await Product.deleteMany({
-    brand: { $in: seedCatalog.map((item) => item.brand) },
+    $or: seedCatalog.map((item) => ({
+      brand: item.brand,
+      model: item.model,
+      color: item.color,
+    })),
   });
 
   const docs = seedCatalog.map((item) => {

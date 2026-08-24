@@ -34,11 +34,6 @@ export const formatUploadDatetime = (date: Date): string => {
 };
 
 const getExtension = (file: Express.Multer.File): string => {
-  const fromName = path.extname(file.originalname).toLowerCase();
-  if (fromName) {
-    return fromName;
-  }
-
   return ALLOWED_MIME_TYPES.get(file.mimetype) ?? '.jpg';
 };
 
