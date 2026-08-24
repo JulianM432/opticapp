@@ -1,5 +1,5 @@
 export const STORE_INFO = {
   name: 'Opticapp',
-  address: '', // COMPLETAR por owner
-  phone: '', // COMPLETAR por owner
+  address: 'Fake Address 1234',
+  phone: '3434123456',
 };
