@@ -1,11 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { anteojosDir, formatUploadDatetime } from '../configs/multer.js';
 import { connectDb } from '../configs/db.js';
 import { Product } from '../models/product.js';
 import type { Material } from '../models/product.js';
+
+dotenv.config({ quiet: true });
 
 const PNG_1X1 = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',

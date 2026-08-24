@@ -1,0 +1,6 @@
+{
+  "admin": [
+    { "route": "/auth/me", "methods": ["GET"] },
+    { "route": "/auth/logout", "methods": ["POST"] }
+  ]
+}
