@@ -1,7 +1,9 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import { createApp } from './configs/app.js';
 import { connectDb } from './configs/db.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+
+dotenv.config({ quiet: true });
 
 const port = Number(process.env.PORT ?? 5000);
 const app = createApp();

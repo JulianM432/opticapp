@@ -1,8 +1,10 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { connectDb } from '../configs/db.js';
 import { hashPassword } from '../helpers/hashPassword.js';
 import { User } from '../models/user.js';
+
+dotenv.config({ quiet: true });
 
 const requireEnv = (name: string): string => {
   const value = process.env[name];
