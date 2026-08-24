@@ -10,7 +10,7 @@ import { useProduct } from '@/hooks/useProduct';
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { product, isLoading, isNotFound } = useProduct(id);
+  const { product, isLoading, isNotFound, error } = useProduct(id);
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
@@ -44,6 +44,10 @@ export function ProductDetailPage() {
             El producto no existe o ya no está publicado.
           </p>
         </div>
+      )}
+
+      {!isLoading && !product && !isNotFound && error && (
+        <p className="text-muted-foreground">{error}</p>
       )}
 
       {!isLoading && product && (

@@ -15,7 +15,7 @@ function parsePage(value: string | null): number {
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePage(searchParams.get('page'));
-  const { data, isLoading } = useProducts(page);
+  const { data, isLoading, error } = useProducts(page);
 
   const totalPages = data?.totalPages ?? 0;
   const canGoPrevious = page > 1 && (totalPages === 0 || page <= totalPages);
@@ -49,6 +49,8 @@ export function CatalogPage() {
       {isLoading && (
         <p className="text-muted-foreground">Cargando catálogo...</p>
       )}
+
+      {!isLoading && error && <p className="text-muted-foreground">{error}</p>}
 
       {!isLoading && data && data.total === 0 && (
         <p className="text-muted-foreground">No hay armazones publicados.</p>

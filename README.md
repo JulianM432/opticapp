@@ -8,11 +8,11 @@ Repositorio backend: [opticapp-back](https://github.com/JulianM432/opticapp-back
 
 Este repo incluye su propia documentación de specs y reglas de Cursor:
 
-| Recurso | Descripción |
-|---------|-------------|
-| [SPECS.md](SPECS.md) | Etapa activa y visión del frontend |
-| [specs/](specs/) | Constitución, arquitectura, UI/tema, etapas |
-| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + frontend) |
+| Recurso                          | Descripción                                 |
+| -------------------------------- | ------------------------------------------- |
+| [SPECS.md](SPECS.md)             | Etapa activa y visión del frontend          |
+| [specs/](specs/)                 | Constitución, arquitectura, UI/tema, etapas |
+| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + frontend)      |
 
 **Cursor (desktop / iOS / cloud):** abrir **este directorio** como workspace (`opticapp-front`), no la carpeta contenedora `opticapp/`.
 
@@ -20,24 +20,24 @@ Al avanzar de etapa, actualizar `SPECS.md` también en el repo backend para mant
 
 ## Stack
 
-| Capa | Tecnología |
-|------|------------|
-| Runtime | Node.js 22+ |
-| Gestor de paquetes | pnpm |
-| Lenguaje | TypeScript (strict) |
-| Build | Vite |
-| UI | React 19 |
-| Componentes | Shadcn UI (Mira / Zinc / Sky, Inter, Lucide) |
-| Estilos | Tailwind CSS v4 |
-| Routing | React Router v7 |
-| HTTP client | Axios (`withCredentials`) |
-| Lint / formato | ESLint flat + Prettier |
+| Capa               | Tecnología                                   |
+| ------------------ | -------------------------------------------- |
+| Runtime            | Node.js 22+                                  |
+| Gestor de paquetes | pnpm                                         |
+| Lenguaje           | TypeScript (strict)                          |
+| Build              | Vite                                         |
+| UI                 | React 19                                     |
+| Componentes        | Shadcn UI (Mira / Zinc / Sky, Inter, Lucide) |
+| Estilos            | Tailwind CSS v4                              |
+| Routing            | React Router v7                              |
+| HTTP client        | Axios (`withCredentials`)                    |
+| Lint / formato     | ESLint flat + Prettier                       |
 
 ## Requisitos
 
 - Node.js `>=22.0.0` (`node -v`)
 - pnpm
-- Backend en ejecución para el health check (`opticapp-back`)
+- Backend en ejecución para el catálogo (`opticapp-back`)
 
 ## Instalación
 
@@ -53,18 +53,18 @@ La app arranca en `http://localhost:5173`.
 
 Ver [.env.example](.env.example):
 
-| Variable | Descripción |
-|----------|-------------|
+| Variable       | Descripción                                        |
+| -------------- | -------------------------------------------------- |
 | `VITE_API_URL` | URL base del backend (ej. `http://localhost:3000`) |
 
 ## Scripts
 
-| Script | Descripción |
-|--------|-------------|
-| `pnpm dev` | Servidor de desarrollo Vite |
-| `pnpm build` | Build de producción |
-| `pnpm preview` | Preview del build |
-| `pnpm lint` | ESLint sobre `src/` |
+| Script         | Descripción                 |
+| -------------- | --------------------------- |
+| `pnpm dev`     | Servidor de desarrollo Vite |
+| `pnpm build`   | Build de producción         |
+| `pnpm preview` | Preview del build           |
+| `pnpm lint`    | ESLint sobre `src/`         |
 
 ## Estructura de archivos
 
@@ -74,18 +74,29 @@ Ver [.env.example](.env.example):
 ├── .cursor/rules/
 ├── public/
 │   ├── logo.svg              # Logo Opticapp (lentes)
-│   └── favicon.ico
+│   ├── favicon.ico
+│   └── images/
+│       └── not-found.png     # Placeholder si el producto no tiene imagen
 ├── src/
-│   ├── main.tsx              # Entry point React
+│   ├── main.tsx
 │   ├── App.tsx               # React Router v7
 │   ├── api/
-│   │   └── client.ts         # Axios + health check
+│   │   ├── client.ts         # Axios + helpers de error
+│   │   └── product.ts        # productApi
 │   ├── components/
-│   │   └── ui/               # Componentes Shadcn (Button, etc.)
+│   │   ├── ProductCard.tsx
+│   │   ├── ThemeToggle.tsx
+│   │   └── ui/               # Componentes Shadcn
+│   ├── constants/
+│   │   └── store.ts          # Dirección y teléfono del footer
+│   ├── hooks/
+│   │   ├── useProducts.ts
+│   │   └── useProduct.ts
 │   ├── layouts/
-│   │   └── PublicLayout.tsx  # Header logo + footer vacío
+│   │   └── PublicLayout.tsx  # Header (logo + dark mode) + footer
 │   ├── pages/
-│   │   └── HomePage.tsx      # Título + estado del backend
+│   │   ├── CatalogPage.tsx   # Catálogo paginado (`/`)
+│   │   └── ProductDetailPage.tsx  # Detalle (`/products/:id`)
 │   ├── lib/
 │   │   └── utils.ts          # cn() para Tailwind/Shadcn
 │   └── index.css             # Tema Zinc/Sky + Tailwind
@@ -95,6 +106,6 @@ Ver [.env.example](.env.example):
 └── tsconfig.json
 ```
 
-## Bootstrap
+## Catálogo público
 
-La home pública muestra el health check del backend y **no incluye enlace al panel admin** (`/admin` se accede manualmente en etapas futuras).
+La home (`/`) muestra el catálogo paginado de armazones publicados. El detalle está en `/products/:id`. **No incluye enlace al panel admin** (`/admin` se accede manualmente en etapas futuras).
