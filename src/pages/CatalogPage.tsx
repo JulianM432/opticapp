@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductCard } from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
@@ -17,12 +18,24 @@ export function CatalogPage() {
   const { data, isLoading } = useProducts(page);
 
   const totalPages = data?.totalPages ?? 0;
-  const canGoPrevious = page > 1;
+  const canGoPrevious = page > 1 && (totalPages === 0 || page <= totalPages);
   const canGoNext = totalPages > 0 && page < totalPages;
 
   const goToPage = (nextPage: number) => {
     setSearchParams(nextPage <= 1 ? {} : { page: String(nextPage) });
   };
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    if (data.totalPages > 0 && page > data.totalPages) {
+      setSearchParams(
+        data.totalPages <= 1 ? {} : { page: String(data.totalPages) },
+      );
+    }
+  }, [data, page, setSearchParams]);
 
   return (
     <section className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8">
@@ -37,42 +50,42 @@ export function CatalogPage() {
         <p className="text-muted-foreground">Cargando catálogo...</p>
       )}
 
-      {!isLoading && data && data.items.length === 0 && (
+      {!isLoading && data && data.total === 0 && (
         <p className="text-muted-foreground">No hay armazones publicados.</p>
       )}
 
       {!isLoading && data && data.items.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {data.items.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {data.items.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
 
-          <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-            <p className="text-sm text-muted-foreground">
-              Página {data.page} de {data.totalPages}
-            </p>
-            <div className="flex gap-2">
-              <Button
-                disabled={!canGoPrevious}
-                onClick={() => goToPage(page - 1)}
-                type="button"
-                variant="outline"
-              >
-                Anterior
-              </Button>
-              <Button
-                disabled={!canGoNext}
-                onClick={() => goToPage(page + 1)}
-                type="button"
-                variant="outline"
-              >
-                Siguiente
-              </Button>
-            </div>
+      {!isLoading && data && data.totalPages > 0 && (
+        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+          <p className="text-sm text-muted-foreground">
+            Página {Math.min(page, data.totalPages)} de {data.totalPages}
+          </p>
+          <div className="flex gap-2">
+            <Button
+              disabled={!canGoPrevious}
+              onClick={() => goToPage(page - 1)}
+              type="button"
+              variant="outline"
+            >
+              Anterior
+            </Button>
+            <Button
+              disabled={!canGoNext}
+              onClick={() => goToPage(page + 1)}
+              type="button"
+              variant="outline"
+            >
+              Siguiente
+            </Button>
           </div>
-        </>
+        </div>
       )}
     </section>
   );

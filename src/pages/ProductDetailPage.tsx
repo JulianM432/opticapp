@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { getMaterialLabel } from '@/constants/materials';
@@ -12,6 +12,10 @@ export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { product, isLoading, isNotFound } = useProduct(id);
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    setFailedImages({});
+  }, [id]);
 
   const markImageFailed = (index: number) => {
     setFailedImages((current) =>
