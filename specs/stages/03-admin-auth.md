@@ -1,6 +1,6 @@
 # Etapa 3 — Auth admin (Frontend)
 
-**Estado:** pendiente  
+**Estado:** activa  
 **Depende de:** Etapa 1
 
 ## Objetivo
