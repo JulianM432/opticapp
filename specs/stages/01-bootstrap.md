@@ -9,18 +9,18 @@ Crear la base del repo frontend con pnpm, Vite, React + Shadcn (tema Mira), sin 
 
 ## Alcance
 
-- [ ] Inicializar con pnpm, Vite, React, TypeScript.
-- [ ] Shadcn con tema [ui-theme.md](../ui-theme.md): **Mira, Zinc, Sky, Inter, Lucide**.
-- [ ] Alias `@/` → `src/`.
-- [ ] **React Router v7**.
-- [ ] Logo + favicon (lentes) en `public/`.
-- [ ] `api/client.ts`: Axios, `withCredentials: true`.
-- [ ] `App.tsx`: ruta `/` placeholder con `PublicLayout` básico (header logo + footer vacío).
-- [ ] `HomePage`: título Opticapp + health check del backend.
-- [ ] `.env.example`, `.prettierrc`, `eslint.config.js`.
-- [ ] **Sin link a `/admin`** en ninguna parte de la UI pública.
-- [ ] `README.md`: cómo instalar (`pnpm install`), env, `pnpm dev`.
-- [ ] `engines.node: ">=22.0.0"` en `package.json`.
+- [x] Inicializar con pnpm, Vite, React, TypeScript.
+- [x] Shadcn con tema [ui-theme.md](../ui-theme.md): **Mira, Zinc, Sky, Inter, Lucide**.
+- [x] Alias `@/` → `src/`.
+- [x] **React Router v7**.
+- [x] Logo + favicon (lentes) en `public/`.
+- [x] `api/client.ts`: Axios, `withCredentials: true`.
+- [x] `App.tsx`: ruta `/` placeholder con `PublicLayout` básico (header logo + footer vacío).
+- [x] `HomePage`: título Opticapp + health check del backend.
+- [x] `.env.example`, Prettier en `package.json`, `eslint.config.js`.
+- [x] **Sin link a `/admin`** en ninguna parte de la UI pública.
+- [x] `README.md`: cómo instalar (`pnpm install`), env, `pnpm dev`.
+- [x] `engines.node: ">=22.0.0"` en `package.json`.
 
 ## Fuera de alcance
 
@@ -30,12 +30,12 @@ Crear la base del repo frontend con pnpm, Vite, React + Shadcn (tema Mira), sin 
 
 ## Criterios de aceptación
 
-- [ ] `pnpm dev` → Vite OK en `http://localhost:5173`.
-- [ ] HomePage muestra health check del backend.
-- [ ] Shadcn Button importable.
-- [ ] Tema Mira/Zinc/Sky aplicado.
-- [ ] Logo y favicon presentes.
-- [ ] Sin referencias a admin en home pública.
+- [x] `pnpm dev` → Vite OK en `http://localhost:5173`.
+- [x] HomePage muestra health check del backend.
+- [x] Shadcn Button importable.
+- [x] Tema Mira/Zinc/Sky aplicado.
+- [x] Logo y favicon presentes.
+- [x] Sin referencias a admin en home pública.
 
 ## Archivos esperados (mínimo)
 
@@ -44,7 +44,6 @@ package.json
 tsconfig.json
 vite.config.ts
 eslint.config.js
-.prettierrc
 components.json
 .env.example
 public/logo.svg
@@ -60,4 +59,5 @@ src/lib/utils.ts
 ## Notas para el agente
 
 - No crear `package.json` fuera de la raíz de este repo.
+- Prettier: clave `"prettier"` en `package.json` (ver [conventions.md](../conventions.md)).
 - Commits locales opcionales con formato `create: frontend/bootstrap`.

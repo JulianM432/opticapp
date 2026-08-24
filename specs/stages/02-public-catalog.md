@@ -1,6 +1,6 @@
 # Etapa 2 — Catálogo público + uploads (Frontend)
 
-**Estado:** pendiente  
+**Estado:** activa  
 **Depende de:** Etapa 1
 
 ## Objetivo
