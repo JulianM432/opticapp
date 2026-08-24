@@ -14,7 +14,6 @@ const getCookieOptions = (): CookieOptions => ({
   sameSite: 'lax',
   path: '/',
   secure: process.env.NODE_ENV === 'production',
-  maxAge: 24 * 60 * 60 * 1000,
 });
 
 export const authController = {
@@ -33,9 +32,12 @@ export const authController = {
         );
       }
 
-      const { user, token } = await authService.login(parsed.data);
+      const { user, token, expiresAt } = await authService.login(parsed.data);
 
-      res.cookie(getCookieName(), token, getCookieOptions());
+      res.cookie(getCookieName(), token, {
+        ...getCookieOptions(),
+        maxAge: Math.max(0, expiresAt - Date.now()),
+      });
       res.json(user);
     } catch (err) {
       next(err);

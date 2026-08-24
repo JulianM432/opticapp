@@ -7,7 +7,10 @@ export type PermissionEntry = {
 
 export type PermissionsMap = Record<string, PermissionEntry[]>;
 
-const permissionsMap = permissions as PermissionsMap;
+type CompiledPermissionEntry = {
+  matcher: RegExp;
+  methods: Set<string>;
+};
 
 const routeToRegex = (route: string): RegExp => {
   const pattern = route
@@ -21,17 +24,38 @@ const routeToRegex = (route: string): RegExp => {
     })
     .join('/');
 
-  return new RegExp(`^${pattern}$`);
+  const trailingSlash = route === '/' ? '' : '/?';
+
+  return new RegExp(`^${pattern}${trailingSlash}$`, 'i');
 };
+
+const normalizeMethod = (method: string): string => {
+  const normalized = method.toUpperCase();
+  return normalized === 'HEAD' ? 'GET' : normalized;
+};
+
+const permissionsMap = Object.fromEntries(
+  Object.entries(permissions as PermissionsMap).map(([role, entries]) => [
+    role,
+    entries.map(
+      (entry): CompiledPermissionEntry => ({
+        matcher: routeToRegex(entry.route),
+        methods: new Set(entry.methods.map(normalizeMethod)),
+      }),
+    ),
+  ]),
+) as Record<string, CompiledPermissionEntry[]>;
 
 const findMatchingEntry = (
   path: string,
   method: string,
-  entries: PermissionEntry[],
-): PermissionEntry | undefined => {
+  entries: CompiledPermissionEntry[],
+): CompiledPermissionEntry | undefined => {
+  const normalizedMethod = normalizeMethod(method);
+
   return entries.find(
     (entry) =>
-      entry.methods.includes(method) && routeToRegex(entry.route).test(path),
+      entry.methods.has(normalizedMethod) && entry.matcher.test(path),
   );
 };
 

@@ -43,10 +43,24 @@ const getJwtExpiresIn = (): SignOptions['expiresIn'] => {
   return (process.env.JWT_EXPIRES_IN ?? '1d') as SignOptions['expiresIn'];
 };
 
+const getTokenExpiresAt = (token: string): number => {
+  const payload = jwt.decode(token);
+
+  if (
+    typeof payload !== 'object' ||
+    payload === null ||
+    typeof payload.exp !== 'number'
+  ) {
+    throw new AppError('No se pudo determinar la expiración del token', 500);
+  }
+
+  return payload.exp * 1000;
+};
+
 export const authService = {
   login: async (
     input: LoginInput,
-  ): Promise<{ user: AuthUser; token: string }> => {
+  ): Promise<{ user: AuthUser; token: string; expiresAt: number }> => {
     const user = await User.findOne({
       email: input.email.toLowerCase().trim(),
     });
@@ -61,7 +75,11 @@ export const authService = {
       { expiresIn: getJwtExpiresIn() },
     );
 
-    return { user: toAuthUser(user), token };
+    return {
+      user: toAuthUser(user),
+      token,
+      expiresAt: getTokenExpiresAt(token),
+    };
   },
 
   me: async (userId: string): Promise<AuthUser> => {

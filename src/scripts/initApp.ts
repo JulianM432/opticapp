@@ -17,33 +17,35 @@ const requireEnv = (name: string): string => {
 };
 
 const initApp = async (): Promise<void> => {
-  await connectDb();
-
   const email = requireEnv('ADMIN_EMAIL').toLowerCase().trim();
   const password = requireEnv('ADMIN_PASSWORD');
   const firstName = requireEnv('ADMIN_FIRST_NAME');
   const lastName = requireEnv('ADMIN_LAST_NAME');
 
-  const existing = await User.findOne({ email });
+  try {
+    await connectDb();
 
-  if (existing) {
-    console.log(`Admin already exists: ${email}`);
+    const existing = await User.findOne({ email });
+
+    if (existing) {
+      console.log(`Admin already exists: ${email}`);
+      return;
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await User.create({
+      email,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      role: 'admin',
+    });
+
+    console.log(`Admin created: ${email}`);
+  } finally {
     await mongoose.disconnect();
-    return;
   }
-
-  const hashedPassword = await hashPassword(password);
-
-  await User.create({
-    email,
-    password: hashedPassword,
-    firstName,
-    lastName,
-    role: 'admin',
-  });
-
-  console.log(`Admin created: ${email}`);
-  await mongoose.disconnect();
 };
 
 initApp().catch((error: unknown) => {
