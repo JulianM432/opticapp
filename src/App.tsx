@@ -1,16 +1,23 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 import { PublicLayout } from '@/layouts/PublicLayout';
-import { HomePage } from '@/pages/HomePage';
+import { CatalogPage } from '@/pages/CatalogPage';
+import { ProductDetailPage } from '@/pages/ProductDetailPage';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route index element={<HomePage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="system" storageKey="theme">
+      <BrowserRouter>
+        <Toaster />
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route index element={<CatalogPage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

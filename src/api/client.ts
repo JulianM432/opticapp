@@ -1,18 +1,27 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
 export const apiClient = axios.create({
-  baseURL: apiUrl,
+  baseURL: API_URL,
   withCredentials: true,
 });
 
-export type HealthResponse = {
-  status: 'ok' | 'degraded';
-  mongodb: 'connected' | 'disconnected';
-};
+export function getApiErrorMessage(error: unknown): string {
+  if (
+    isAxiosError<{ message?: string }>(error) &&
+    error.response?.data?.message
+  ) {
+    return error.response.data.message;
+  }
 
-export const fetchHealth = async (): Promise<HealthResponse> => {
-  const { data } = await apiClient.get<HealthResponse>('/health');
-  return data;
-};
+  return 'No se pudo cargar la información';
+}
+
+export function getApiErrorStatus(error: unknown): number | undefined {
+  if (isAxiosError(error)) {
+    return error.response?.status;
+  }
+
+  return undefined;
+}
