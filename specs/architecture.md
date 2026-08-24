@@ -9,9 +9,9 @@ opticapp-back/               ← raíz del repo (este workspace)
 ├── SPECS.md
 ├── specs/
 ├── .cursor/rules/
-├── package.json
+├── package.json              # Incluye clave "prettier" (ver conventions.md)
+├── pnpm-workspace.yaml
 ├── pnpm-lock.yaml
-├── .prettierrc
 ├── eslint.config.js
 ├── .env.example
 ├── uploads/                   # No commitear binarios; sí .gitkeep
@@ -28,6 +28,7 @@ opticapp-back/               ← raíz del repo (este workspace)
     │   ├── authenticate.ts
     │   ├── authorize.ts
     │   ├── upload.ts          # Middleware multer por ruta/contexto
+    │   ├── requestLogger.ts   # Log de requests HTTP (bootstrap)
     │   └── errorHandler.ts
     ├── routes/
     ├── controllers/

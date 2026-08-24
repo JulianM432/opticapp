@@ -1,6 +1,6 @@
 # Etapa 2 — Catálogo público + uploads (Backend)
 
-**Estado:** pendiente  
+**Estado:** activa  
 **Depende de:** Etapa 1
 
 ## Objetivo
