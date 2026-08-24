@@ -8,11 +8,11 @@ Repositorio backend: [opticapp-back](https://github.com/JulianM432/opticapp-back
 
 Este repo incluye su propia documentación de specs y reglas de Cursor:
 
-| Recurso | Descripción |
-|---------|-------------|
-| [SPECS.md](SPECS.md) | Etapa activa y visión del frontend |
-| [specs/](specs/) | Constitución, arquitectura, UI/tema, etapas |
-| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + frontend) |
+| Recurso                          | Descripción                                 |
+| -------------------------------- | ------------------------------------------- |
+| [SPECS.md](SPECS.md)             | Etapa activa y visión del frontend          |
+| [specs/](specs/)                 | Constitución, arquitectura, UI/tema, etapas |
+| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + frontend)      |
 
 **Cursor (desktop / iOS / cloud):** abrir **este directorio** como workspace (`opticapp-front`), no la carpeta contenedora `opticapp/`.
 
@@ -20,18 +20,18 @@ Al avanzar de etapa, actualizar `SPECS.md` también en el repo backend para mant
 
 ## Stack
 
-| Capa | Tecnología |
-|------|------------|
-| Runtime | Node.js 22+ |
-| Gestor de paquetes | pnpm |
-| Lenguaje | TypeScript (strict) |
-| Build | Vite |
-| UI | React 19 |
-| Componentes | Shadcn UI (Mira / Zinc / Sky, Inter, Lucide) |
-| Estilos | Tailwind CSS v4 |
-| Routing | React Router v7 |
-| HTTP client | Axios (`withCredentials`) |
-| Lint / formato | ESLint flat + Prettier |
+| Capa               | Tecnología                                   |
+| ------------------ | -------------------------------------------- |
+| Runtime            | Node.js 22+                                  |
+| Gestor de paquetes | pnpm                                         |
+| Lenguaje           | TypeScript (strict)                          |
+| Build              | Vite                                         |
+| UI                 | React 19                                     |
+| Componentes        | Shadcn UI (Mira / Zinc / Sky, Inter, Lucide) |
+| Estilos            | Tailwind CSS v4                              |
+| Routing            | React Router v7                              |
+| HTTP client        | Axios (`withCredentials`)                    |
+| Lint / formato     | ESLint flat + Prettier                       |
 
 ## Requisitos
 
@@ -53,18 +53,18 @@ La app arranca en `http://localhost:5173`.
 
 Ver [.env.example](.env.example):
 
-| Variable | Descripción |
-|----------|-------------|
+| Variable       | Descripción                                        |
+| -------------- | -------------------------------------------------- |
 | `VITE_API_URL` | URL base del backend (ej. `http://localhost:3000`) |
 
 ## Scripts
 
-| Script | Descripción |
-|--------|-------------|
-| `pnpm dev` | Servidor de desarrollo Vite |
-| `pnpm build` | Build de producción |
-| `pnpm preview` | Preview del build |
-| `pnpm lint` | ESLint sobre `src/` |
+| Script         | Descripción                 |
+| -------------- | --------------------------- |
+| `pnpm dev`     | Servidor de desarrollo Vite |
+| `pnpm build`   | Build de producción         |
+| `pnpm preview` | Preview del build           |
+| `pnpm lint`    | ESLint sobre `src/`         |
 
 ## Estructura de archivos
 
@@ -81,22 +81,22 @@ Ver [.env.example](.env.example):
 │   ├── main.tsx              # Entry point React
 │   ├── App.tsx               # React Router v7 (`/`, `/products/:id`)
 │   ├── api/
-│   │   ├── client.ts         # Axios + withCredentials
+│   │   ├── client.ts         # Axios + withCredentials + helpers de error
 │   │   └── product.ts        # productApi (listado y detalle)
 │   ├── components/
 │   │   ├── ProductCard.tsx
 │   │   ├── ThemeToggle.tsx
 │   │   └── ui/               # Componentes Shadcn (Button, Toaster)
 │   ├── constants/
-│   │   └── store.ts          # Nombre, dirección y teléfono
+│   │   └── store.ts          # Nombre, dirección y teléfono del footer
 │   ├── hooks/
 │   │   ├── useProducts.ts
 │   │   └── useProduct.ts
 │   ├── layouts/
 │   │   └── PublicLayout.tsx  # Header (logo + dark mode) + footer
 │   ├── pages/
-│   │   ├── CatalogPage.tsx   # Catálogo paginado
-│   │   └── ProductDetailPage.tsx
+│   │   ├── CatalogPage.tsx   # Catálogo paginado (`/`)
+│   │   └── ProductDetailPage.tsx  # Detalle (`/products/:id`)
 │   ├── lib/
 │   │   └── utils.ts          # cn() para Tailwind/Shadcn
 │   └── index.css             # Tema Zinc/Sky + Tailwind
