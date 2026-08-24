@@ -37,7 +37,7 @@ Al avanzar de etapa, actualizar `SPECS.md` también en el repo backend para mant
 
 - Node.js `>=22.0.0` (`node -v`)
 - pnpm
-- Backend en ejecución para el catálogo (`opticapp-back`)
+- Backend en ejecución para el catálogo (`GET /products` y `GET /products/:id` en `opticapp-back`)
 
 ## Instalación
 
@@ -78,17 +78,17 @@ Ver [.env.example](.env.example):
 │   └── images/
 │       └── not-found.png     # Placeholder si el producto no tiene imagen
 ├── src/
-│   ├── main.tsx
-│   ├── App.tsx               # React Router v7
+│   ├── main.tsx              # Entry point React
+│   ├── App.tsx               # React Router v7 (`/`, `/products/:id`)
 │   ├── api/
-│   │   ├── client.ts         # Axios + helpers de error
-│   │   └── product.ts        # productApi
+│   │   ├── client.ts         # Axios + withCredentials + helpers de error
+│   │   └── product.ts        # productApi (listado y detalle)
 │   ├── components/
 │   │   ├── ProductCard.tsx
 │   │   ├── ThemeToggle.tsx
-│   │   └── ui/               # Componentes Shadcn
+│   │   └── ui/               # Componentes Shadcn (Button, Toaster)
 │   ├── constants/
-│   │   └── store.ts          # Dirección y teléfono del footer
+│   │   └── store.ts          # Nombre, dirección y teléfono del footer
 │   ├── hooks/
 │   │   ├── useProducts.ts
 │   │   └── useProduct.ts
@@ -108,4 +108,4 @@ Ver [.env.example](.env.example):
 
 ## Catálogo público
 
-La home (`/`) muestra el catálogo paginado de armazones publicados. El detalle está en `/products/:id`. **No incluye enlace al panel admin** (`/admin` se accede manualmente en etapas futuras).
+La home (`/`) muestra el catálogo paginado de armazones publicados. El detalle vive en `/products/:id`. La UI **no incluye enlace al panel admin** (`/admin` se accede manualmente en etapas futuras).
