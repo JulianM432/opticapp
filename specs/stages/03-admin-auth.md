@@ -1,6 +1,6 @@
 # Etapa 3 — Auth admin (Backend)
 
-**Estado:** activa  
+**Estado:** hecha  
 **Depende de:** Etapa 1
 
 ## Objetivo

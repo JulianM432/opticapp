@@ -28,7 +28,7 @@ Al avanzar de etapa, actualizar `SPECS.md` también en el repo frontend para man
 | Framework HTTP | Express |
 | Base de datos | MongoDB + Mongoose |
 | Validación HTTP | Zod |
-| Auth | JWT + cookie httpOnly (etapas futuras) |
+| Auth | JWT + cookie httpOnly |
 | Uploads | Multer (imágenes en disco, URL en MongoDB) |
 | Lint / formato | ESLint flat + Prettier |
 
@@ -58,7 +58,13 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 | `MONGODB_URI` | URI de conexión MongoDB |
 | `CLIENT_URL` | Origen del frontend para CORS |
 | `UPLOADS_BASE_URL` | Base pública de imágenes (seed) |
-| `JWT_SECRET` | Secreto JWT (etapas futuras) |
+| `JWT_SECRET` | Secreto JWT |
+| `JWT_EXPIRES_IN` | Expiración del token (default `1d`) |
+| `COOKIE_NAME` | Nombre de la cookie de sesión (default `token`) |
+| `ADMIN_EMAIL` | Email del admin (script `initApp`) |
+| `ADMIN_PASSWORD` | Contraseña del admin |
+| `ADMIN_FIRST_NAME` | Nombre del admin |
+| `ADMIN_LAST_NAME` | Apellido del admin |
 
 ## Scripts
 
@@ -69,6 +75,7 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 | `pnpm start` | Ejecuta build de producción |
 | `pnpm lint` | ESLint sobre `src/` |
 | `pnpm seed:products` | Carga 5 armazones publicados de ejemplo |
+| `pnpm exec tsx src/scripts/initApp.ts` | Crea el admin único si no existe |
 
 ## Estructura de archivos
 
@@ -88,10 +95,13 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 │   ├── models/               # Schemas Mongoose
 │   ├── validations/          # Schemas Zod
 │   ├── middlewares/
+│   │   ├── authenticate.ts   # JWT en cookie para rutas protegidas
+│   │   ├── authorize.ts      # Permisos por role (permissions.json)
 │   │   ├── errorHandler.ts   # Errores → { message } en español
 │   │   ├── requestLogger.ts  # Log de requests HTTP
 │   │   └── upload.ts         # Middleware Multer (uso admin en etapa 4)
 │   ├── scripts/
+│   │   ├── initApp.ts        # Crea admin único desde env
 │   │   └── seed-products.ts  # Seed opcional del catálogo público
 │   ├── errors/
 │   │   └── AppError.ts       # Errores operacionales tipados
@@ -113,5 +123,8 @@ Ver [.env.example](.env.example). Mínimo para desarrollo:
 | `GET` | `/products?page=&limit=` | Catálogo paginado (`items`, `total`, `page`, `limit`, `totalPages`). Defaults: `page=1`, `limit=12`. Solo publicados y no eliminados. |
 | `GET` | `/products/:id` | Detalle público. Id inválido → 400. No publicado, soft-deleted o inexistente → 404. |
 | `GET` | `/uploads/...` | Archivos estáticos de imágenes |
+| `POST` | `/auth/login` | Login admin. Body: `{ email, password }`. OK → cookie httpOnly + `AuthUser`. |
+| `POST` | `/auth/logout` | Cierra sesión (requiere cookie). |
+| `GET` | `/auth/me` | Usuario autenticado (requiere cookie). |
 
 Las rutas **no** usan prefijo `/api`. El payload de éxito va directo en `res.json` (sin wrapper `{ data }`). Cada producto expone `id` y nunca `_id`.
