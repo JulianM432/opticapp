@@ -9,17 +9,17 @@ Login admin, JWT cookie 1d, permisos globales vía `permissions.json`.
 
 ## Alcance
 
-- [ ] Model `user.ts` (email, password, firstName, lastName, role).
-- [ ] `scripts/initApp.ts`: crea **un** admin desde env si no existe (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_FIRST_NAME`, `ADMIN_LAST_NAME`).
-- [ ] `configs/permissions.json` inicial.
-- [ ] `services/auth.ts`, `controllers/auth.ts`, `routes/auth.ts`:
+- [x] Model `user.ts` (email, password, firstName, lastName, role).
+- [x] `scripts/initApp.ts`: crea **un** admin desde env si no existe (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_FIRST_NAME`, `ADMIN_LAST_NAME`).
+- [x] `configs/permissions.json` inicial.
+- [x] `services/auth.ts`, `controllers/auth.ts`, `routes/auth.ts`:
   - `POST /auth/login` — público
   - `POST /auth/logout`, `GET /auth/me` — protegidos
-- [ ] `/auth/me` → `AuthUser` (id, email, firstName, lastName, role).
-- [ ] Middlewares globales `authenticate` + `authorize` en `configs/app.ts`.
-- [ ] Cookie: `httpOnly`, `sameSite: 'lax'`, **`secure: false` en dev**, `secure: true` en production.
-- [ ] `JWT_EXPIRES_IN=1d`.
-- [ ] Validación Zod login.
+- [x] `/auth/me` → `AuthUser` (id, email, firstName, lastName, role).
+- [x] Middlewares globales `authenticate` + `authorize` en `configs/app.ts`.
+- [x] Cookie: `httpOnly`, `sameSite: 'lax'`, **`secure: false` en dev**, `secure: true` en production.
+- [x] `JWT_EXPIRES_IN=1d`.
+- [x] Validación Zod login.
 
 ## Fuera de alcance
 
@@ -31,12 +31,12 @@ Login admin, JWT cookie 1d, permisos globales vía `permissions.json`.
 
 ## Criterios de aceptación
 
-- [ ] `pnpm exec tsx src/scripts/initApp.ts` crea admin único.
-- [ ] Login OK → cookie + user JSON.
-- [ ] Login fallido → 401, message español.
-- [ ] `/auth/me` restaura sesión al recargar (cookie válida).
-- [ ] JWT expira a 1d.
-- [ ] Middlewares solo en `app.ts`.
+- [x] `pnpm exec tsx src/scripts/initApp.ts` crea admin único.
+- [x] Login OK → cookie + user JSON.
+- [x] Login fallido → 401, message español.
+- [x] `/auth/me` restaura sesión al recargar (cookie válida).
+- [x] JWT expira a 1d.
+- [x] Middlewares solo en `app.ts`.
 
 ## `permissions.json` (etapa 3)
 
