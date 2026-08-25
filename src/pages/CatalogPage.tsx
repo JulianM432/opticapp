@@ -1,7 +1,21 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { AlertCircleIcon, SunglassesIcon } from '@hugeicons/core-free-icons';
+import { CatalogHero } from '@/components/CatalogHero';
+import { CatalogPagination } from '@/components/CatalogPagination';
 import { ProductCard } from '@/components/ProductCard';
+import { ProductGridSkeleton } from '@/components/ProductGridSkeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
+import { Separator } from '@/components/ui/separator';
 import { useProducts } from '@/hooks/useProducts';
 
 function parsePage(value: string | null): number {
@@ -15,11 +29,7 @@ function parsePage(value: string | null): number {
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePage(searchParams.get('page'));
-  const { data, isLoading, error } = useProducts(page);
-
-  const totalPages = data?.totalPages ?? 0;
-  const canGoPrevious = page > 1 && (totalPages === 0 || page <= totalPages);
-  const canGoNext = totalPages > 0 && page < totalPages;
+  const { data, isLoading, error, refetch } = useProducts(page);
 
   const goToPage = (nextPage: number) => {
     setSearchParams(nextPage <= 1 ? {} : { page: String(nextPage) });
@@ -38,57 +48,91 @@ export function CatalogPage() {
   }, [data, page, setSearchParams]);
 
   return (
-    <section className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Catálogo</h1>
-        <p className="text-muted-foreground">
-          Armazones publicados de la óptica.
-        </p>
-      </div>
+    <>
+      <CatalogHero />
 
-      {isLoading && (
-        <p className="text-muted-foreground">Cargando catálogo...</p>
-      )}
-
-      {!isLoading && error && <p className="text-muted-foreground">{error}</p>}
-
-      {!isLoading && data && data.total === 0 && (
-        <p className="text-muted-foreground">No hay armazones publicados.</p>
-      )}
-
-      {!isLoading && data && data.items.length > 0 && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {data.items.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      )}
-
-      {!isLoading && data && data.totalPages > 0 && (
-        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-          <p className="text-sm text-muted-foreground">
-            Página {Math.min(page, data.totalPages)} de {data.totalPages}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              disabled={!canGoPrevious}
-              onClick={() => goToPage(page - 1)}
-              type="button"
-              variant="outline"
+      <section
+        aria-labelledby="catalog-grid-heading"
+        className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6"
+        id="catalog-grid"
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-1">
+            <h2
+              className="text-display font-heading text-2xl font-semibold tracking-tight"
+              id="catalog-grid-heading"
             >
-              Anterior
-            </Button>
-            <Button
-              disabled={!canGoNext}
-              onClick={() => goToPage(page + 1)}
-              type="button"
-              variant="outline"
-            >
-              Siguiente
-            </Button>
+              Catálogo
+            </h2>
+            {!isLoading && data && data.total > 0 && (
+              <p className="text-sm text-muted-foreground">
+                {data.total}{' '}
+                {data.total === 1 ? 'armazón publicado' : 'armazones publicados'}
+              </p>
+            )}
           </div>
         </div>
-      )}
-    </section>
+
+        <Separator />
+
+        <div aria-live="polite" className="min-h-80">
+          {isLoading && <ProductGridSkeleton />}
+
+          {!isLoading && error && (
+            <Alert variant="destructive">
+              <HugeiconsIcon icon={AlertCircleIcon} strokeWidth={2} />
+              <AlertTitle>No pudimos cargar el catálogo</AlertTitle>
+              <AlertDescription className="flex flex-col gap-3">
+                <span>{error}</span>
+                <Button
+                  className="w-fit"
+                  onClick={refetch}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  Reintentar
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {!isLoading && data && data.total === 0 && (
+            <Empty className="border border-dashed border-border/80 py-16">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <HugeiconsIcon icon={SunglassesIcon} strokeWidth={2} />
+                </EmptyMedia>
+                <EmptyTitle>Sin armazones publicados</EmptyTitle>
+                <EmptyDescription>
+                  Todavía no hay modelos en la vidriera. Volvé pronto para ver
+                  las novedades.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          )}
+
+          {!isLoading && data && data.items.length > 0 && (
+            <div className="flex flex-col gap-10">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5 xl:grid-cols-4 xl:gap-6">
+                {data.items.map((product, index) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    staggerIndex={index}
+                  />
+                ))}
+              </div>
+
+              <CatalogPagination
+                currentPage={Math.min(page, data.totalPages)}
+                onPageChange={goToPage}
+                totalPages={data.totalPages}
+              />
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { getApiErrorMessage, getApiErrorStatus } from '@/api/client';
 import { productApi } from '@/api/product';
@@ -9,6 +9,11 @@ export function useProduct(id: string | undefined) {
   const [isLoading, setIsLoading] = useState(true);
   const [isNotFound, setIsNotFound] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refetchKey, setRefetchKey] = useState(0);
+
+  const refetch = useCallback(() => {
+    setRefetchKey((current) => current + 1);
+  }, []);
 
   useEffect(() => {
     if (!id) {
@@ -51,7 +56,7 @@ export function useProduct(id: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, refetchKey]);
 
-  return { product, isLoading, isNotFound, error };
+  return { product, isLoading, isNotFound, error, refetch };
 }
