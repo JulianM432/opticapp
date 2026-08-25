@@ -1,6 +1,6 @@
 # Etapa 3 — Auth admin (Frontend)
 
-**Estado:** activa  
+**Estado:** hecha  
 **Depende de:** Etapa 1
 
 ## Objetivo
@@ -9,13 +9,13 @@ Login admin en `/admin`, sesión persistente vía cookie + `AuthContext`, dashbo
 
 ## Alcance
 
-- [ ] `AuthContext` + `useAuth` + persistencia vía `/auth/me`.
-- [ ] **`/admin`**: si no auth → login; si auth → dashboard.
-- [ ] **`/admin/login`**: formulario (redirige a dashboard si ya logueado).
-- [ ] **`/admin/profile`**: muestra email, firstName, lastName (solo lectura en MVP).
-- [ ] Dashboard `/admin`: links a Productos (etapa 4) y Perfil.
-- [ ] `ProtectedRoute` para rutas admin.
-- [ ] **Home pública sin link a admin.**
+- [x] `AuthContext` + `useAuth` + persistencia vía `/auth/me`.
+- [x] **`/admin`**: si no auth → login; si auth → dashboard.
+- [x] **`/admin/login`**: formulario (redirige a dashboard si ya logueado).
+- [x] **`/admin/profile`**: muestra email, firstName, lastName (solo lectura en MVP).
+- [x] Dashboard `/admin`: links a Productos (etapa 4) y Perfil.
+- [x] `ProtectedRoute` para rutas admin.
+- [x] **Home pública sin link a admin.**
 
 ## Fuera de alcance
 
@@ -27,12 +27,12 @@ Login admin en `/admin`, sesión persistente vía cookie + `AuthContext`, dashbo
 
 ## Criterios de aceptación
 
-- [ ] Login OK → user en context + cookie del backend.
-- [ ] Login fallido → mensaje de error en español.
-- [ ] `/auth/me` restaura sesión al recargar.
-- [ ] `/admin` accesible solo escribiendo URL manualmente (sin link en home).
-- [ ] Dashboard muestra acceso CRUD (placeholder) y perfil.
-- [ ] Rutas admin protegidas con `ProtectedRoute`.
+- [x] Login OK → user en context + cookie del backend.
+- [x] Login fallido → mensaje de error en español.
+- [x] `/auth/me` restaura sesión al recargar.
+- [x] `/admin` accesible solo escribiendo URL manualmente (sin link en home).
+- [x] Dashboard muestra acceso CRUD (placeholder) y perfil.
+- [x] Rutas admin protegidas con `ProtectedRoute`.
 
 ## Archivos esperados
 

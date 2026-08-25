@@ -31,8 +31,10 @@ Generar tema con [ui.shadcn.com](https://ui.shadcn.com) o equivalente con estos 
 
 ### Público (`PublicLayout`)
 
-- **Header:** logo Opticapp + toggle dark mode. **Sin link a admin.**
-- **Footer:** dirección y teléfono de la óptica (valores desde env o `constants/store.ts`).
+- **Header:** logo Opticapp + link Catálogo (`/catalogo`) + toggle dark mode. En home, header transparente sobre el hero hasta hacer scroll. **Sin link a admin.**
+- **Footer:** fondo oscuro, 3 columnas (marca/contacto, catálogo, visitanos) con dirección y teléfono desde `constants/store.ts`.
+- **Home (`/`):** hero carousel full-bleed + sección “Nuestro catálogo” (4 productos) + botón “Ver todos” → `/catalogo`.
+- **Catálogo (`/catalogo`):** breadcrumb, banda visual con título, conteo de productos, grid 4 columnas, paginación.
 - **Responsive:** mobile-first.
 
 ### Admin (`AdminLayout`) — básico en MVP

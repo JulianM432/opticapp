@@ -7,7 +7,10 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
-export function getApiErrorMessage(error: unknown): string {
+export function getApiErrorMessage(
+  error: unknown,
+  fallback = 'No se pudo cargar la información',
+): string {
   if (
     isAxiosError<{ message?: string }>(error) &&
     error.response?.data?.message
@@ -15,7 +18,7 @@ export function getApiErrorMessage(error: unknown): string {
     return error.response.data.message;
   }
 
-  return 'No se pudo cargar la información';
+  return fallback;
 }
 
 export function getApiErrorStatus(error: unknown): number | undefined {

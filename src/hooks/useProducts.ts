@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '@/api/client';
 import { productApi } from '@/api/product';
@@ -10,6 +10,11 @@ export function useProducts(page: number, limit = DEFAULT_LIMIT) {
   const [data, setData] = useState<PaginatedProducts | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refetchKey, setRefetchKey] = useState(0);
+
+  const refetch = useCallback(() => {
+    setRefetchKey((current) => current + 1);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,7 +47,7 @@ export function useProducts(page: number, limit = DEFAULT_LIMIT) {
     return () => {
       cancelled = true;
     };
-  }, [page, limit]);
+  }, [page, limit, refetchKey]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 }

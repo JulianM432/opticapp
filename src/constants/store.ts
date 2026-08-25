@@ -1,5 +1,5 @@
 export const STORE_INFO = {
-  name: 'Opticapp',
+  name: 'Optica Bovril',
   address: 'Fake Address 1234',
   phone: '3434123456',
 };
