@@ -43,7 +43,15 @@ export const productImageStorage = multer.diskStorage({
     cb(null, anteojosDir);
   },
   filename: (req: Request, file, cb) => {
-    const productId = req.params.id ?? 'new';
+    const paramId = req.params.id;
+    const routeId = typeof paramId === 'string' ? paramId : paramId?.[0];
+    const productId = req.productId ?? routeId;
+
+    if (!productId) {
+      cb(new AppError('No se pudo determinar el id del producto', 500), '');
+      return;
+    }
+
     const datetime = formatUploadDatetime(new Date());
     cb(null, `${productId}_${datetime}${getExtension(file)}`);
   },

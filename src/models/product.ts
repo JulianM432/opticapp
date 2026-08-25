@@ -16,6 +16,19 @@ export interface ProductPublic {
   images: string[];
 }
 
+export interface ProductAdmin {
+  id: string;
+  brand: string;
+  model: string;
+  color: string;
+  material: Material;
+  description?: string;
+  images: string[];
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const productSchema = new Schema(
   {
     brand: { type: String, required: true, trim: true },

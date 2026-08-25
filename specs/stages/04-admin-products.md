@@ -1,6 +1,6 @@
 # Etapa 4 — CRUD productos admin (Backend)
 
-**Estado:** pendiente  
+**Estado:** hecha  
 **Depende de:** Etapa 2, Etapa 3
 
 ## Objetivo
@@ -9,17 +9,17 @@ CRUD admin con upload de imágenes (Multer), soft delete, validación enum/uniqu
 
 ## Alcance
 
-- [ ] Extender `productService`: `getAllAdmin`, `create`, `update`, `softDelete`.
-- [ ] Rutas (protegidas vía `permissions.json`, sin middleware inline):
+- [x] Extender `productService`: `getAllAdmin`, `create`, `update`, `softDelete`.
+- [x] Rutas (protegidas vía `permissions.json`, sin middleware inline):
   - `GET /admin/products`
   - `POST /products` — multipart: datos + imágenes
   - `PUT /products/:id` — multipart opcional
   - `DELETE /products/:id` — soft delete (`deletedAt`)
-- [ ] Usar `middlewares/upload.ts` en POST/PUT (categoría `anteojos/`).
-- [ ] Nombre archivo: `{productId}_{datetime}.{ext}`.
-- [ ] Guardar URLs en `images[]`.
-- [ ] Zod: material enum, campos obligatorios, unique brand+model+color → 409 español.
-- [ ] Actualizar `permissions.json`:
+- [x] Usar `middlewares/upload.ts` en POST/PUT (categoría `anteojos/`).
+- [x] Nombre archivo: `{productId}_{datetime}.{ext}`.
+- [x] Guardar URLs en `images[]`.
+- [x] Zod: material enum, campos obligatorios, unique brand+model+color → 409 español.
+- [x] Actualizar `permissions.json`:
 
 ```json
 {
@@ -40,12 +40,12 @@ CRUD admin con upload de imágenes (Multer), soft delete, validación enum/uniqu
 
 ## Criterios de aceptación
 
-- [ ] Crear con imágenes → URLs en `/uploads/anteojos/`.
-- [ ] Duplicado brand+model+color → 409.
-- [ ] Delete → soft delete, desaparece del catálogo público.
-- [ ] Publicar (`isPublished: true`) → visible en `GET /products`.
-- [ ] Solo admin accede (401/403 según caso).
-- [ ] Errores en español.
+- [x] Crear con imágenes → URLs en `/uploads/anteojos/`.
+- [x] Duplicado brand+model+color → 409.
+- [x] Delete → soft delete, desaparece del catálogo público.
+- [x] Publicar (`isPublished: true`) → visible en `GET /products`.
+- [x] Solo admin accede (401/403 según caso).
+- [x] Errores en español.
 
 ## Archivos esperados
 

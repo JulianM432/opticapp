@@ -1,6 +1,9 @@
 {
   "admin": [
     { "route": "/auth/me", "methods": ["GET"] },
-    { "route": "/auth/logout", "methods": ["POST"] }
+    { "route": "/auth/logout", "methods": ["POST"] },
+    { "route": "/admin/products", "methods": ["GET"] },
+    { "route": "/products", "methods": ["POST"] },
+    { "route": "/products/:id", "methods": ["PUT", "DELETE"] }
   ]
 }
