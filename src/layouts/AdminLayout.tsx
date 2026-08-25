@@ -39,8 +39,8 @@ const navItems = [
     label: 'Productos',
     href: '/admin/products',
     icon: PackageIcon,
-    disabled: true,
-    badge: 'Próximamente',
+    disabled: false,
+    badge: null,
   },
   {
     label: 'Perfil',

@@ -26,18 +26,28 @@ const THEME_ICONS: Record<Theme, typeof Sun01Icon> = {
   system: ComputerIcon,
 };
 
-export function ThemeToggle() {
+type ThemeToggleProps = {
+  variant?: 'default' | 'ghost-light';
+};
+
+export function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
   const CurrentIcon = THEME_ICONS[theme];
+  const isGhostLight = variant === 'ghost-light';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           aria-label={`Tema: ${THEME_LABELS[theme]}. Elegir apariencia.`}
+          className={
+            isGhostLight
+              ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white'
+              : undefined
+          }
           size="sm"
           type="button"
-          variant="outline"
+          variant={isGhostLight ? 'outline' : 'outline'}
         >
           <HugeiconsIcon icon={CurrentIcon} strokeWidth={2} data-icon="inline-start" />
           <span className="hidden sm:inline">{THEME_LABELS[theme]}</span>

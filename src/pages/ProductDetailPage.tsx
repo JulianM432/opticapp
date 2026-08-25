@@ -40,6 +40,14 @@ export function ProductDetailPage() {
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link to="/" viewTransition>
+                Inicio
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/catalogo" viewTransition>
                 Catálogo
               </Link>
             </BreadcrumbLink>
@@ -73,7 +81,7 @@ export function ProductDetailPage() {
             </EmptyHeader>
             <EmptyContent>
               <Button asChild variant="outline">
-                <Link to="/" viewTransition>
+                <Link to="/catalogo" viewTransition>
                   <HugeiconsIcon
                     icon={ArrowLeft01Icon}
                     strokeWidth={2}

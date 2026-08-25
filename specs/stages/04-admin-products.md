@@ -1,6 +1,6 @@
 # Etapa 4 — CRUD productos admin (Frontend)
 
-**Estado:** pendiente  
+**Estado:** hecha  
 **Depende de:** Etapa 2, Etapa 3
 
 ## Objetivo
@@ -9,15 +9,15 @@ Formularios admin con upload de imágenes, soft delete, toasts y navegación en 
 
 ## Alcance
 
-- [ ] `productApi`: CRUD + FormData para imágenes.
-- [ ] `ProductsListPage`, `ProductFormPage`, `ProductForm`.
-- [ ] Upload múltiple imágenes en formulario.
-- [ ] Select material (enum).
-- [ ] Toggle `isPublished`.
-- [ ] Confirmación antes de soft delete.
-- [ ] Toasts éxito/error.
-- [ ] Rutas: `/admin/products`, `/admin/products/new`, `/admin/products/:id/edit`.
-- [ ] `AdminLayout` básico con nav.
+- [x] `productApi`: CRUD + FormData para imágenes.
+- [x] `ProductsListPage`, `ProductFormPage`, `ProductForm`.
+- [x] Upload múltiple imágenes en formulario.
+- [x] Select material (enum).
+- [x] Toggle `isPublished`.
+- [x] Confirmación antes de soft delete.
+- [x] Toasts éxito/error.
+- [x] Rutas: `/admin/products`, `/admin/products/new`, `/admin/products/:id/edit`.
+- [x] `AdminLayout` básico con nav.
 
 ## Fuera de alcance
 
@@ -29,12 +29,12 @@ Formularios admin con upload de imágenes, soft delete, toasts y navegación en 
 
 ## Criterios de aceptación
 
-- [ ] Crear producto con imágenes → visible en listado admin.
-- [ ] Duplicado brand+model+color → toast/mensaje con error 409 del backend.
-- [ ] Delete → desaparece del listado admin y del catálogo público.
-- [ ] Publicar → visible en catálogo paginado.
-- [ ] Solo admin accede (ProtectedRoute).
-- [ ] Errores en español.
+- [x] Crear producto con imágenes → visible en listado admin.
+- [x] Duplicado brand+model+color → toast/mensaje con error 409 del backend.
+- [x] Delete → desaparece del listado admin y del catálogo público.
+- [x] Publicar → visible en catálogo paginado.
+- [x] Solo admin accede (ProtectedRoute).
+- [x] Errores en español.
 
 ## Archivos esperados
 

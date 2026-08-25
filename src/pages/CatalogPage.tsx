@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { AlertCircleIcon, SunglassesIcon } from '@hugeicons/core-free-icons';
-import { CatalogHero } from '@/components/CatalogHero';
+import { CatalogPageBanner } from '@/components/CatalogPageBanner';
 import { CatalogPagination } from '@/components/CatalogPagination';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductGridSkeleton } from '@/components/ProductGridSkeleton';
@@ -15,7 +15,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { Separator } from '@/components/ui/separator';
 import { useProducts } from '@/hooks/useProducts';
 
 function parsePage(value: string | null): number {
@@ -49,31 +48,24 @@ export function CatalogPage() {
 
   return (
     <>
-      <CatalogHero />
+      <CatalogPageBanner />
 
       <section
         aria-labelledby="catalog-grid-heading"
-        className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6"
+        className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 sm:py-10"
         id="catalog-grid"
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex flex-col gap-1">
-            <h2
-              className="text-display font-heading text-2xl font-semibold tracking-tight"
+        <div className="flex items-center justify-end border-b border-border/60 pb-4">
+          {!isLoading && data && data.total > 0 && (
+            <p
+              className="text-label text-[0.65rem] font-medium text-muted-foreground"
               id="catalog-grid-heading"
             >
-              Catálogo
-            </h2>
-            {!isLoading && data && data.total > 0 && (
-              <p className="text-sm text-muted-foreground">
-                {data.total}{' '}
-                {data.total === 1 ? 'armazón publicado' : 'armazones publicados'}
-              </p>
-            )}
-          </div>
+              {data.total}{' '}
+              {data.total === 1 ? 'producto' : 'productos'}
+            </p>
+          )}
         </div>
-
-        <Separator />
 
         <div aria-live="polite" className="min-h-80">
           {isLoading && <ProductGridSkeleton />}

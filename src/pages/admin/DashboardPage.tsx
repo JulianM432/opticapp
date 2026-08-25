@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { PackageIcon, UserIcon } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -38,14 +37,13 @@ export function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant="secondary">Próximamente</Badge>
-            <p className="mt-3 text-sm text-muted-foreground">
-              El CRUD de productos estará disponible en la próxima etapa.
+            <p className="text-sm text-muted-foreground">
+              Creá, editá y publicá armazones en el catálogo.
             </p>
           </CardContent>
           <CardFooter>
-            <Button disabled type="button" variant="outline">
-              Ir a productos
+            <Button asChild type="button">
+              <Link to="/admin/products">Ir a productos</Link>
             </Button>
           </CardFooter>
         </Card>

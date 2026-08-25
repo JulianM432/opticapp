@@ -61,7 +61,8 @@ El backend vive en un **repo hermano** (`opticapp-back`). Ver su `specs/architec
 
 | Ruta | Page | Acceso | Etapa |
 |------|------|--------|-------|
-| `/` | Catálogo (grid de armazones) | Público | 2 |
+| `/` | Home (hero + preview catálogo) | Público | 2 |
+| `/catalogo` | Catálogo (grid de armazones) | Público | 2 |
 | `/products/:id` | Detalle de armazón | Público | 2 |
 | `/admin/login` | Login admin | Público | 3 |
 | `/admin` | Dashboard o login si no auth | Admin / público | 3 |
