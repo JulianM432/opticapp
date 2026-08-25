@@ -2,6 +2,15 @@ import type { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import { AppError } from '../errors/AppError.js';
 
+const isJsonParseError = (
+  err: unknown,
+): err is SyntaxError & { status: number; type: string } =>
+  err instanceof SyntaxError &&
+  'status' in err &&
+  err.status === 400 &&
+  'type' in err &&
+  err.type === 'entity.parse.failed';
+
 export const errorHandler = (
   err: unknown,
   _req: Request,
@@ -22,6 +31,11 @@ export const errorHandler = (
     }
 
     res.status(400).json({ message: 'Error al subir el archivo' });
+    return;
+  }
+
+  if (isJsonParseError(err)) {
+    res.status(400).json({ message: 'JSON inválido' });
     return;
   }
 
