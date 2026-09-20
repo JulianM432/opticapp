@@ -1,0 +1,44 @@
+---
+description: Convenciones backend Express + Mongoose + JWT para OpticApp
+globs: "**/*.ts"
+alwaysApply: false
+---
+
+# Backend OpticApp
+
+## Capas obligatorias
+
+`routes → controllers → services → models`
+
+- Archivos por recurso: `{resource}.ts` (sin `.controller`, `.service`, `.routes`).
+- Controllers y services como **objetos exportados**: `productController`, `productService`.
+- Controllers flacos. Services con lógica de negocio. Models solo Mongoose.
+
+## Rutas
+
+- Sin prefijo `/api`. Ej: `GET /products`, `POST /auth/login`.
+- Routes **no** aplican middlewares de auth. Solo path + controller.
+
+## Auth y permisos (etapa 3+)
+
+- `configs/permissions.json`: `{ route, methods[] }` agrupado por ruta.
+- `authenticate` + `authorize` registrados **globalmente** en `configs/app.ts`.
+- JWT en cookie `httpOnly`. Ruta protegida sin token → 401. Sin permiso → 403.
+
+## Errores
+
+- Usar `AppError` con statusCode (400, 401, 403, 404, 409, 500).
+- Middleware `errorHandler` al final de Express.
+
+## Estilo
+
+- Ver `specs/conventions.md` (Prettier, patrón de objetos, imports).
+
+## Prohibido
+
+- Acceder a Mongoose desde controllers.
+- Repetir middlewares de auth en routes.
+- Sufijos `.controller.ts`, `.service.ts`, `.routes.ts`.
+- Crear archivos de frontend en este repo.
+
+Ver `specs/architecture.md` y `specs/data-model.md`.
