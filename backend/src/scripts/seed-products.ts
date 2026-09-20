@@ -15,7 +15,7 @@ const PNG_1X1 = Buffer.from(
 );
 
 const uploadsBaseUrl =
-  process.env.UPLOADS_BASE_URL ?? 'http://localhost:3000/uploads';
+  process.env.UPLOADS_BASE_URL ?? 'http://localhost:5000/uploads';
 
 interface SeedProduct {
   brand: string;

@@ -1,54 +1,60 @@
-# Etapa 2 — Catálogo público + uploads (Backend)
+# Etapa 2 — Catálogo público + uploads (Frontend)
 
 **Estado:** hecha  
 **Depende de:** Etapa 1
 
 ## Objetivo
 
-API de catálogo paginado, detalle de armazones publicados, infraestructura Multer e imágenes estáticas.
+Vidriera paginada con listado y detalle de armazones, layouts públicos, toasts y dark mode.
 
 ## Alcance
 
-- [x] Model `product.ts` según [data-model.md](../data-model.md) (enum material, soft delete, unique index).
-- [x] `services/product.ts`: `getPublishedPaginated(page, limit)`, `getPublishedById(id)` — excluir `deletedAt`.
-- [x] `controllers/product.ts` + `routes/product.ts`:
-  - `GET /products?page=&limit=` → respuesta paginada (ver [architecture.md](../architecture.md)).
-  - `GET /products/:id` → detalle publicado; soft-deleted o no publicado → 404.
-- [x] Rutas **públicas** (no en `permissions.json`).
-- [x] Validación Zod ObjectId → 400.
-- [x] **`configs/multer.ts`** + **`middlewares/upload.ts`** (config listo; upload admin en etapa 4).
-- [x] Servir estáticos `/uploads`.
-- [x] Seed opcional: 3–5 productos publicados con imágenes en `uploads/anteojos/`.
+- [x] `types/product.ts` — `ProductPublic`, `PaginatedProducts`.
+- [x] `api/product.ts` — `productApi.getProducts(page, limit)`, `getProductById`.
+- [x] `hooks/useProducts.ts`, `hooks/useProduct.ts`.
+- [x] `layouts/PublicLayout.tsx`: header (logo, **dark mode toggle**), footer (dirección + teléfono desde constants).
+- [x] `pages/CatalogPage.tsx`: grid paginado + controles página anterior/siguiente.
+- [x] `pages/ProductDetailPage.tsx`.
+- [x] `components/ProductCard.tsx`.
+- [x] Placeholder imagen: `/images/not-found.png` si `images` vacío.
+- [x] **Toasts** (Sonner) para errores de carga.
+- [x] Rutas: `/`, `/products/:id`.
+- [x] UI español. Responsive mobile-first.
+- [x] **Sin link a admin.**
 
 ## Fuera de alcance
 
-- Auth / admin / upload desde formulario (etapa 4).
+- Auth / admin / upload desde formulario (etapas 3–4).
+- WhatsApp (etapa 5).
 - Precios.
 - Filtros y búsqueda avanzada.
-- UI del frontend (repo `opticapp-front`).
+- Endpoints y Multer (paquete `backend/`).
 
 ## Criterios de aceptación
 
-- [x] `GET /products` paginado, solo `isPublished: true` y `deletedAt: null`.
-- [x] Defaults `page=1`, `limit=12`.
-- [x] Response sin `_id`, con `id`.
-- [x] Errores en español.
-- [x] Multer config + carpetas uploads operativas; static `/uploads` sirve archivos.
+- [x] Catálogo con paginación funcional contra `GET /products`.
+- [x] Detalle en `/products/:id`.
+- [x] Dark mode toggle persiste preferencia.
+- [x] Footer muestra dirección y teléfono.
+- [x] Imagen not-found cuando no hay imagen.
+- [x] Toasts en errores de API.
 
 ## Archivos esperados
 
 ```
-src/models/product.ts
-src/services/product.ts
-src/controllers/product.ts
-src/routes/product.ts
-src/validations/product.ts
-src/configs/multer.ts
-src/middlewares/upload.ts
-src/scripts/seed-products.ts   (opcional)
+src/types/product.ts
+src/api/product.ts
+src/hooks/useProducts.ts
+src/hooks/useProduct.ts
+src/pages/CatalogPage.tsx
+src/pages/ProductDetailPage.tsx
+src/components/ProductCard.tsx
+src/layouts/PublicLayout.tsx
+public/images/not-found.png
+src/constants/store.ts
 ```
 
 ## Notas para el agente
 
-- Usar `mapDocument` en service al retornar productos.
-- Material enum validado con Zod.
+- Ver [ui-theme.md](../ui-theme.md).
+- Datos vía `hooks/` → `api/`; nunca Axios en pages o components.

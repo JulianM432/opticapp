@@ -1,10 +1,10 @@
-# Convenciones de código — Backend
+# Convenciones de código — OpticApp
 
-Fuente de verdad para estilo, nombres y formato. El agente debe seguir esto además de [constitution.md](constitution.md).
+Fuente de verdad para estilo, nombres y formato en ambos paquetes. El agente debe seguir esto además de [constitution.md](constitution.md).
 
 ## Prettier
 
-Config estándar IT (Prettier defaults + `singleQuote`), en la clave `"prettier"` del `package.json`:
+Config estándar IT (Prettier defaults + `singleQuote`), en la clave `"prettier"` del `package.json` raíz y de cada paquete:
 
 ```json
 "prettier": {
@@ -20,21 +20,29 @@ Config estándar IT (Prettier defaults + `singleQuote`), en la clave `"prettier"
 }
 ```
 
-### pnpm
+## pnpm (monorepo)
 
-Desde pnpm v11, la config de instalación **no** va en `package.json`. Autorizar builds nativos de dependencias (p. ej. `esbuild` para `tsx`) en `pnpm-workspace.yaml`:
+Workspace en la raíz (`pnpm-workspace.yaml`):
 
 ```yaml
+packages:
+  - backend
+  - frontend
+
 allowBuilds:
   esbuild: true
+  bcrypt: true
 ```
+
+Instalar dependencias desde la raíz: `pnpm install`. Ejecutar scripts por paquete: `pnpm --filter opticapp-back dev`.
+
+**Node.js 22** requerido (`engines.node: ">=22.0.0"`).
 
 ## ESLint
 
-Config flat recomendada (typescript-eslint v8+):
+Config flat recomendada (typescript-eslint v8+) en cada paquete:
 
 ```javascript
-// eslint.config.js
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
@@ -46,20 +54,6 @@ export default tseslint.config(
 
 Scripts: `"lint": "eslint src"`, `"lint:fix": "eslint src --fix"`.
 
-## Zod
-
-### ¿Por qué Zod?
-
-| Razón | Detalle |
-|-------|---------|
-| Un solo lugar para validar | El body/query de Express se valida antes del service; mismas reglas que el tipo TS inferido. |
-| Menos bugs silenciosos | MongoDB no valida forma del JSON entrante; Zod rechaza campos extraños o tipos incorrectos con **400** claro. |
-| Alineado con SDD | Las specs definen campos obligatorios (`brand`, `model`…); Zod traduce eso a código verificable sin inventar reglas en el controller. |
-| Sin duplicar tipos | `z.infer<typeof productSchema>` genera el type; no mantener interface + validación por separado. |
-| Ecosistema TS | Integración directa con Express middleware; ampliamente usado en stacks MERN modernos. |
-
-**Alternativa descartada:** validar a mano en controllers → más código repetido y el agente tiende a olvidar casos edge.
-
 ## Commits
 
 Formato acordado (cuando se commitee):
@@ -67,99 +61,65 @@ Formato acordado (cuando se commitee):
 ```
 fix: product/validation
 update: auth/login
-create: product/upload-middleware
-remove: product/legacy-seed
+create: catalog/product-card
+remove: home/legacy-page
 ```
 
 Patrón: `{fix|update|create|remove}: {resource}/{thing}`
 
-## Nombres de archivos
+## Backend — nombres y patrones
 
-**Regla:** un recurso = `{resource}.ts` por carpeta. La carpeta indica la capa.
+Un recurso = `{resource}.ts` por carpeta (sin `.controller`, `.service`, `.routes`).
+
+| Capa | Ejemplo |
+|------|---------|
+| `routes/` | `product.ts` |
+| `controllers/` | `product.ts` → `export const productController = { ... }` |
+| `services/` | `product.ts` → `export const productService = { ... }` |
+| `models/` | `product.ts` |
+| `validations/` | `product.ts` (Zod) |
+
+## Frontend — nombres y patrones
 
 | Carpeta | Ejemplo |
 |---------|---------|
-| `routes/` | `product.ts`, `auth.ts` |
-| `controllers/` | `product.ts`, `auth.ts` |
-| `services/` | `product.ts`, `auth.ts` |
-| `validations/` | `product.ts`, `auth.ts` |
-| `models/` | `product.ts`, `user.ts` |
-| `middlewares/` | `authenticate.ts`, `upload.ts` |
-| `helpers/` | `hashPassword.ts` |
-| `utils/` | `mapDocument.ts` |
+| `api/` | `product.ts`, `auth.ts`, `client.ts` |
+| `hooks/` | `useProducts.ts`, `useAuth.ts` |
+| `pages/` | `CatalogPage.tsx`, `admin/LoginPage.tsx` |
+| `types/` | `product.ts`, `auth.ts` |
+| `components/` | `ProductCard.tsx` |
+| `helpers/` | `whatsapp.ts` |
 
-## Alias `@/`
+Alias `@/` → `src/` en `vite.config.ts` + `tsconfig paths`.
 
-Opcional: `@/` → `src/` para imports limpios.
-
-## Estilo de código — objetos exportados
-
-Controllers y services como **objeto con métodos**:
+### Objetos exportados en `api/`
 
 ```typescript
-import { productService } from '../services/product';
+import { apiClient } from './client';
 
-export const productController = {
-  getAll: async (req, res, next) => {
-    try {
-      const products = await productService.getPublished();
-      res.json(products);
-    } catch (err) {
-      next(err);
-    }
+export const productApi = {
+  getProducts: async (page: number, limit: number) => {
+    const { data } = await apiClient.get('/products', { params: { page, limit } });
+    return data;
   },
 };
 ```
 
-## Serialización `_id` → `id`
+- Named exports de objetos (`productApi`, `authApi`). No `export default` en `api/`.
+- Prohibido sufijo `.api.ts`.
 
-**Problema:** Mongoose usa `_id`; la API expone `id` string.
+## Zod (backend)
 
-**Solución:** helper único en `utils/mapDocument.ts`. Usarlo en **services** al devolver datos — nunca mezclar `_id` e `id` en controllers.
-
-```typescript
-// utils/mapDocument.ts — contrato
-export const mapDocument = <T>(doc: { _id: unknown } & T) => ({
-  id: String(doc._id),
-  ...doc,
-  _id: undefined,
-});
-```
-
-Eliminar `_id` del objeto final antes de `res.json`.
-
-## Exports
-
-- Named exports de objetos (`productService`, `productController`).
-- Routers: `export { router as productRouter }`.
-- No `export default` en controllers ni services.
+Validación HTTP en `backend/src/validations/` con Zod. El frontend **no** duplica reglas de negocio de Mongoose/Zod; confía en la API y muestra errores `{ message }`.
 
 ## TypeScript
 
 - `strict: true`. Prohibido `any`.
 - Preferir `interface` para shapes, `type` para unions.
+- Types de API alineados con [data-model.md](data-model.md).
 
 ## Idioma
 
 - Código (variables, funciones, archivos): **inglés**.
-- Mensajes de error API (`message`): **español**.
-
-## Scripts pnpm
-
-```json
-{
-  "dev": "tsx watch src/index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js"
-}
-```
-
-Sin nodemon. **Node.js 22** requerido (`engines.node: ">=22.0.0"` en `package.json`).
-
-```json
-{
-  "engines": {
-    "node": ">=22.0.0"
-  }
-}
-```
+- UI visible al usuario: **español**.
+- Mensajes de error del backend (`message`): mostrar en español tal cual vienen.

@@ -1,63 +1,53 @@
-# Etapa 4 — CRUD productos admin (Backend)
+# Etapa 4 — CRUD productos admin (Frontend)
 
 **Estado:** hecha  
 **Depende de:** Etapa 2, Etapa 3
 
 ## Objetivo
 
-CRUD admin con upload de imágenes (Multer), soft delete, validación enum/unique.
+Formularios admin con upload de imágenes, soft delete, toasts y navegación en panel admin.
 
 ## Alcance
 
-- [x] Extender `productService`: `getAllAdmin`, `create`, `update`, `softDelete`.
-- [x] Rutas (protegidas vía `permissions.json`, sin middleware inline):
-  - `GET /admin/products`
-  - `POST /products` — multipart: datos + imágenes
-  - `PUT /products/:id` — multipart opcional
-  - `DELETE /products/:id` — soft delete (`deletedAt`)
-- [x] Usar `middlewares/upload.ts` en POST/PUT (categoría `anteojos/`).
-- [x] Nombre archivo: `{productId}_{datetime}.{ext}`.
-- [x] Guardar URLs en `images[]`.
-- [x] Zod: material enum, campos obligatorios, unique brand+model+color → 409 español.
-- [x] Actualizar `permissions.json`:
-
-```json
-{
-  "admin": [
-    { "route": "/admin/products", "methods": ["GET"] },
-    { "route": "/products",       "methods": ["POST"] },
-    { "route": "/products/:id",  "methods": ["PUT", "DELETE"] }
-  ]
-}
-```
+- [x] `productApi`: CRUD + FormData para imágenes.
+- [x] `ProductsListPage`, `ProductFormPage`, `ProductForm`.
+- [x] Upload múltiple imágenes en formulario.
+- [x] Select material (enum).
+- [x] Toggle `isPublished`.
+- [x] Confirmación antes de soft delete.
+- [x] Toasts éxito/error.
+- [x] Rutas: `/admin/products`, `/admin/products/new`, `/admin/products/:id/edit`.
+- [x] `AdminLayout` básico con nav.
 
 ## Fuera de alcance
 
 - Import CSV (etapa 6).
 - Precio interno.
+- WhatsApp (etapa 5).
 - Paginación admin (lista completa MVP).
-- Formularios admin (repo `opticapp-front`).
+- Lógica Multer y soft delete en DB (paquete `backend/`).
 
 ## Criterios de aceptación
 
-- [x] Crear con imágenes → URLs en `/uploads/anteojos/`.
-- [x] Duplicado brand+model+color → 409.
-- [x] Delete → soft delete, desaparece del catálogo público.
-- [x] Publicar (`isPublished: true`) → visible en `GET /products`.
-- [x] Solo admin accede (401/403 según caso).
+- [x] Crear producto con imágenes → visible en listado admin.
+- [x] Duplicado brand+model+color → toast/mensaje con error 409 del backend.
+- [x] Delete → desaparece del listado admin y del catálogo público.
+- [x] Publicar → visible en catálogo paginado.
+- [x] Solo admin accede (ProtectedRoute).
 - [x] Errores en español.
 
 ## Archivos esperados
 
 ```
-src/configs/permissions.json
-src/routes/product.ts
-src/controllers/product.ts
-src/services/product.ts
-src/validations/product.ts
+src/pages/admin/ProductsListPage.tsx
+src/pages/admin/ProductFormPage.tsx
+src/components/admin/ProductForm.tsx
+src/layouts/AdminLayout.tsx
+src/api/product.ts          (extender CRUD)
+src/types/product.ts        (ProductAdmin)
 ```
 
 ## Notas para el agente
 
-- Reutilizar multer de etapa 2.
-- `mapDocument` en todas las responses.
+- FormData para POST/PUT con imágenes.
+- Material enum según [data-model.md](../data-model.md).

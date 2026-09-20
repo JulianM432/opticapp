@@ -1,10 +1,12 @@
 ---
 description: Convenciones frontend Vite + React + Shadcn para OpticApp
-globs: "**/*.{ts,tsx}"
+globs: "frontend/**/*.{ts,tsx}"
 alwaysApply: false
 ---
 
 # Frontend OpticApp
+
+Paquete: `frontend/`. Specs en la raíz del monorepo (`SPECS.md`, `specs/`).
 
 ## Capas
 
@@ -33,6 +35,6 @@ alwaysApply: false
 
 - Mostrar precios al público.
 - Botón WhatsApp antes de etapa 5.
-- Crear archivos de backend en este repo.
+- Crear archivos de backend en `frontend/`.
 
 Ver `specs/architecture.md` para rutas y carpetas.

@@ -1,130 +1,112 @@
-# Opticapp Backend
+# Opticapp
 
-API REST para **Opticapp**, plataforma vidriera de catálogo de armazones para una óptica. Sin e-commerce, sin precios públicos ni carrito.
+Monorepo full-stack para **Opticapp**, vidriera de catálogo de armazones para una óptica. Sin e-commerce, sin precios públicos ni carrito.
 
-Repositorio frontend: [opticapp-front](https://github.com/JulianM432/opticapp-front)
+| Paquete | Descripción | Puerto dev |
+|---------|-------------|------------|
+| [`backend/`](backend/) | API REST (Express + MongoDB) | `5000` |
+| [`frontend/`](frontend/) | Interfaz web (React + Vite) | `5173` |
 
-## Spec-Driven Development (SDD)
+Repositorio: [JulianM432/opticapp](https://github.com/JulianM432/opticapp) (privado).
 
-Este repo incluye su propia documentación de specs y reglas de Cursor:
+## Spec-Driven Development
+
+La documentación SDD vive en la raíz del monorepo:
 
 | Recurso | Descripción |
 |---------|-------------|
-| [SPECS.md](SPECS.md) | Etapa activa y visión del backend |
+| [SPECS.md](SPECS.md) | Etapa activa y visión del proyecto |
 | [specs/](specs/) | Constitución, arquitectura, modelo de datos, etapas |
-| [.cursor/rules/](.cursor/rules/) | Reglas para el agente (SDD + backend) |
+| [.cursor/rules/](.cursor/rules/) | Reglas para el agente |
 
-**Cursor (desktop / iOS / cloud):** abrir **este directorio** como workspace (`opticapp-back`), no la carpeta contenedora `opticapp/`.
-
-Al avanzar de etapa, actualizar `SPECS.md` también en el repo frontend para mantener la tabla sincronizada.
-
-## Stack
-
-| Capa | Tecnología |
-|------|------------|
-| Runtime | Node.js 22+ |
-| Gestor de paquetes | pnpm |
-| Lenguaje | TypeScript (strict) |
-| Framework HTTP | Express |
-| Base de datos | MongoDB + Mongoose |
-| Validación HTTP | Zod |
-| Auth | JWT + cookie httpOnly |
-| Uploads | Multer (imágenes en disco, URL en MongoDB) |
-| Lint / formato | ESLint flat + Prettier |
+**Cursor:** abrir la **raíz del monorepo** (`opticapp/`) como workspace.
 
 ## Requisitos
 
 - Node.js `>=22.0.0` (`node -v`)
 - pnpm
-- MongoDB en ejecución (opcional en bootstrap; `/health` reporta estado)
+- MongoDB en ejecución (opcional en bootstrap; `GET /health` reporta estado)
 
 ## Instalación
 
+Desde la raíz del monorepo:
+
 ```bash
 pnpm install
-cp .env.example .env   # Windows: copy .env.example .env
+cp backend/.env.example backend/.env    # Windows: copy backend\.env.example backend\.env
+cp frontend/.env.example frontend/.env  # Windows: copy frontend\.env.example frontend\.env
+```
+
+## Desarrollo
+
+Arrancar ambos servicios en paralelo:
+
+```bash
 pnpm dev
 ```
 
-El servidor arranca en `http://localhost:3000` (configurable con `PORT`).
+O por separado:
+
+```bash
+pnpm dev:backend   # http://localhost:5000
+pnpm dev:frontend  # http://localhost:5173
+```
+
+El frontend consume la API vía `VITE_API_URL`. El backend acepta requests del frontend con CORS (`CLIENT_URL`) y cookies httpOnly.
 
 ## Variables de entorno
 
-Ver [.env.example](.env.example). Mínimo para desarrollo:
+### Backend (`backend/.env.example`)
 
 | Variable | Descripción |
 |----------|-------------|
-| `PORT` | Puerto del servidor (default `3000`) |
+| `PORT` | Puerto del servidor (default `5000`) |
 | `MONGODB_URI` | URI de conexión MongoDB |
-| `CLIENT_URL` | Origen del frontend para CORS |
-| `UPLOADS_BASE_URL` | Base pública de imágenes (seed) |
+| `CLIENT_URL` | Origen del frontend para CORS (`http://localhost:5173`) |
+| `UPLOADS_BASE_URL` | Base pública de imágenes (`http://localhost:5000/uploads`) |
 | `JWT_SECRET` | Secreto JWT |
 | `JWT_EXPIRES_IN` | Expiración del token (default `1d`) |
 | `COOKIE_NAME` | Nombre de la cookie de sesión (default `token`) |
-| `ADMIN_EMAIL` | Email del admin (script `initApp`) |
-| `ADMIN_PASSWORD` | Contraseña del admin |
-| `ADMIN_FIRST_NAME` | Nombre del admin |
-| `ADMIN_LAST_NAME` | Apellido del admin |
+| `ADMIN_*` | Credenciales para script `initApp` |
 
-## Scripts
+### Frontend (`frontend/.env.example`)
+
+| Variable | Descripción |
+|----------|-------------|
+| `VITE_API_URL` | URL base del backend (`http://localhost:5000`) |
+
+## Scripts (raíz)
 
 | Script | Descripción |
 |--------|-------------|
-| `pnpm dev` | Desarrollo con hot reload (`tsx watch`) |
-| `pnpm build` | Compila TypeScript a `dist/` |
-| `pnpm start` | Ejecuta build de producción |
-| `pnpm lint` | ESLint sobre `src/` |
-| `pnpm seed:products` | Carga 5 armazones publicados de ejemplo |
-| `pnpm exec tsx src/scripts/initApp.ts` | Crea el admin único si no existe |
+| `pnpm dev` | Backend + frontend en paralelo |
+| `pnpm dev:backend` | Solo API |
+| `pnpm dev:frontend` | Solo UI |
+| `pnpm build` | Build de ambos paquetes |
+| `pnpm start` | Backend en producción (requiere `pnpm build` previo) |
+| `pnpm lint` | ESLint en ambos paquetes |
 
-## Estructura de archivos
+Ver [backend/README.md](backend/README.md) y [frontend/README.md](frontend/README.md) para scripts específicos de cada paquete.
+
+## Estructura
 
 ```
+opticapp/
 ├── SPECS.md
 ├── specs/
 ├── .cursor/rules/
-├── src/
-│   ├── index.ts              # Entry point
-│   ├── configs/
-│   │   ├── app.ts            # Express: JSON, CORS, cookies, static /uploads
-│   │   ├── db.ts             # Conexión Mongoose
-│   │   └── multer.ts         # Destino, nombre y límites de upload
-│   ├── routes/               # Routers HTTP (sin prefijo /api)
-│   ├── controllers/          # Handlers flacos
-│   ├── services/             # Lógica de negocio
-│   ├── models/               # Schemas Mongoose
-│   ├── validations/          # Schemas Zod
-│   ├── middlewares/
-│   │   ├── authenticate.ts   # JWT en cookie para rutas protegidas
-│   │   ├── authorize.ts      # Permisos por role (permissions.json)
-│   │   ├── errorHandler.ts   # Errores → { message } en español
-│   │   ├── requestLogger.ts  # Log de requests HTTP
-│   │   └── upload.ts         # Middleware Multer (uso admin en etapa 4)
-│   ├── scripts/
-│   │   ├── initApp.ts        # Crea admin único desde env
-│   │   └── seed-products.ts  # Seed opcional del catálogo público
-│   ├── errors/
-│   │   └── AppError.ts       # Errores operacionales tipados
-│   └── utils/
-│       └── mapDocument.ts    # _id → id para respuestas JSON
-├── uploads/
-│   ├── anteojos/             # Imágenes de armazones
-│   └── lentes/               # Reservada (futuro)
-├── .env.example
-├── eslint.config.js
-└── tsconfig.json
+├── .agents/skills/          # Skills de agente (Shadcn, etc.)
+├── backend/                 # API Express
+├── frontend/                # React + Vite
+├── package.json             # Scripts del workspace
+└── pnpm-workspace.yaml
 ```
 
-## Endpoints
+## Migración desde repos anteriores
 
-| Método | Ruta | Respuesta |
-|--------|------|-----------|
-| `GET` | `/health` | `{ status: "ok" \| "degraded", mongodb: "connected" \| "disconnected" }` |
-| `GET` | `/products?page=&limit=` | Catálogo paginado (`items`, `total`, `page`, `limit`, `totalPages`). Defaults: `page=1`, `limit=12`. Solo publicados y no eliminados. |
-| `GET` | `/products/:id` | Detalle público. Id inválido → 400. No publicado, soft-deleted o inexistente → 404. |
-| `GET` | `/uploads/...` | Archivos estáticos de imágenes |
-| `POST` | `/auth/login` | Login admin. Body: `{ email, password }`. OK → cookie httpOnly + `AuthUser`. |
-| `POST` | `/auth/logout` | Cierra sesión (requiere cookie). |
-| `GET` | `/auth/me` | Usuario autenticado (requiere cookie). |
+Este monorepo reemplaza los repositorios archivados:
 
-Las rutas **no** usan prefijo `/api`. El payload de éxito va directo en `res.json` (sin wrapper `{ data }`). Cada producto expone `id` y nunca `_id`.
+- [opticapp-back](https://github.com/JulianM432/opticapp-back) → código en `backend/`
+- [opticapp-front](https://github.com/JulianM432/opticapp-front) → código en `frontend/`
+
+El historial Git de ambos repos se preservó mediante merge de historiales no relacionados.

@@ -1,43 +1,21 @@
 {
-  "name": "opticapp-back",
-  "version": "0.1.0",
+  "name": "opticapp",
   "private": true,
+  "version": "0.1.0",
   "type": "module",
   "engines": {
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "seed:products": "tsx src/scripts/seed-products.ts"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "1.4.7",
-    "cors": "2.8.6",
-    "dotenv": "17.4.2",
-    "express": "5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongoose": "9.9.3",
-    "multer": "2.2.0",
-    "zod": "4.4.3"
-  },
-  "devDependencies": {
-    "@eslint/js": "10.0.1",
-    "@types/bcrypt": "^6.0.0",
-    "@types/cookie-parser": "1.4.10",
-    "@types/cors": "2.8.19",
-    "@types/express": "5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "2.2.0",
-    "@types/node": "22.20.1",
-    "eslint": "10.9.0",
-    "tsx": "4.23.12",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.67.0"
+    "dev": "pnpm -r --parallel dev",
+    "dev:backend": "pnpm --filter opticapp-back dev",
+    "dev:frontend": "pnpm --filter opticapp-front dev",
+    "build": "pnpm -r build",
+    "build:backend": "pnpm --filter opticapp-back build",
+    "build:frontend": "pnpm --filter opticapp-front build",
+    "start": "pnpm --filter opticapp-back start",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix"
   },
   "prettier": {
     "semi": true,

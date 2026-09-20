@@ -1,42 +1,39 @@
-# OpticApp Backend — Spec-Driven Development
+# OpticApp — Spec-Driven Development
 
-> **Este repo es el backend** (`opticapp-back`). Implementar **solo** la sección Backend de la etapa `activa`.
-> El frontend vive en el repo hermano `opticapp-front`. Si la etapa pide trabajo allí, **no** implementarlo aquí.
+> Monorepo full-stack: [`backend/`](backend/) (API Express) y [`frontend/`](frontend/) (React + Vite).
+> Implementar **solo** la etapa marcada como `activa`, respetando el alcance Backend o Frontend de su spec.
 
 ## Visión
 
-API REST para **Opticapp**, plataforma vidriera de catálogo de armazones. Sin e-commerce, sin precios públicos ni carrito. El frontend consume esta API.
+**Opticapp** es una vidriera de catálogo de armazones para una óptica. Sin e-commerce, sin precios públicos ni carrito. El frontend consume la API del backend en el mismo repositorio.
 
-## Stack (este repo)
+## Stack
 
-| Capa | Tecnología |
-|------|------------|
-| Gestor de paquetes | **pnpm** |
-| Node.js | **22.x** (mínimo `>=22.0.0`) — verificar con `node -v` |
-| Framework | Express, TypeScript, Mongoose |
-| Validación HTTP | **Zod** (ver [justificación](specs/conventions.md#zod)) |
-| Auth | JWT (`jsonwebtoken`), bcrypt, cookie-parser — cookie `httpOnly`, exp **1d** |
-| Uploads | Multer — imágenes en disco, URL en MongoDB |
-| Base de datos | MongoDB |
-| Dev | `tsx watch` (sin nodemon) |
-| Lint | ESLint flat config + typescript-eslint ([conventions.md](specs/conventions.md)) |
+| Paquete | Tecnologías |
+|---------|-------------|
+| `backend/` | Express 5, TypeScript, Mongoose, Zod, JWT + cookie httpOnly, Multer |
+| `frontend/` | Vite, React 19, React Router 7, Shadcn UI, Tailwind CSS 4, Axios |
+
+| Común | Valor |
+|-------|-------|
+| Node.js | `>=22.0.0` |
+| Gestor | pnpm (workspace en la raíz) |
 
 ## Regla de oro para el agente
 
-> **Solo se implementa la etapa marcada como `activa`, y solo el alcance Backend de esa etapa.** Si algo no está en la spec, no se hace. Si hay ambigüedad, se pregunta; no se inventa.
+> **Solo se implementa la etapa marcada como `activa`.** Si la spec tiene secciones Backend y Frontend, implementar solo la que corresponda al paquete que se está editando. Si algo no está en la spec, no se hace. Si hay ambigüedad, se pregunta; no se inventa.
 
 ## Documentación
 
 | Documento | Descripción |
 |-----------|-------------|
 | [Constitución](specs/constitution.md) | Principios anti-slop, Hacer / No hacer |
-| [Arquitectura](specs/architecture.md) | Carpetas, API, auth, uploads, error handler |
-| [Modelo de datos](specs/data-model.md) | Schemas User y Product |
-| [Convenciones](specs/conventions.md) | Prettier, ESLint, commits, patrón de objetos |
+| [Arquitectura](specs/architecture.md) | Estructura del monorepo, API, rutas, auth |
+| [Modelo de datos](specs/data-model.md) | Schemas backend y types frontend |
+| [Convenciones](specs/conventions.md) | Prettier, ESLint, commits, patrones |
+| [UI / Tema](specs/ui-theme.md) | Shadcn Mira, layouts, responsive, dark mode |
 
 ## Etapas
-
-> **Sync:** al cambiar `activa`/`hecha`, actualizar también `SPECS.md` en el repo `opticapp-front`.
 
 | # | Etapa | Spec | Estado |
 |---|-------|------|--------|
@@ -50,19 +47,27 @@ API REST para **Opticapp**, plataforma vidriera de catálogo de armazones. Sin e
 
 ### Cómo avanzar de etapa
 
-1. Implementar solo la etapa `activa` (alcance Backend).
+1. Implementar solo la etapa `activa` (Backend en `backend/`, Frontend en `frontend/`).
 2. Revisar criterios de aceptación de su spec.
-3. Marcar `hecha` en esta tabla **y en el SPECS.md del frontend**, y activar la siguiente.
+3. Marcar `hecha` en esta tabla y activar la siguiente.
+
+## Roles
+
+| Rol | Acceso |
+|-----|--------|
+| Público | Ver catálogo paginado de productos publicados |
+| Admin | Login en `/admin` + CRUD productos + ver perfil |
 
 ## Decisiones cerradas (owner)
 
-- Catálogo: solo **armazones** (carpeta uploads `anteojos/`; `lentes/` reservada).
+- Catálogo: solo **armazones** (uploads `anteojos/`; `lentes/` reservada).
 - Auth: JWT **1d** + cookie `httpOnly`; `secure: false` en dev.
 - Admin único creado con script `initApp` en backend.
 - Rutas **sin prefijo `/api`**.
 - Respuestas OK: `res.json(data)`. Errores: `{ message }` en **español**.
-- Código y variables en **inglés**.
+- Código y variables en **inglés**. Textos UI en **español**.
 - Soft delete productos. Unique `brand + model + color`.
 - Sin campo `price` por ahora.
+- **No hay enlace al panel admin** desde la home pública — acceso manual a `/admin`.
 - Commits (cuando aplique): `fix|update|create|remove: resource/thing`.
 - Node.js **22** (`>=22.0.0`).

@@ -1,10 +1,10 @@
 # Modelo de datos
 
-Schemas Mongoose en `models/{resource}.ts`. Serialización `_id` → `id` vía `utils/mapDocument.ts`.
+Schemas Mongoose en `backend/src/models/{resource}.ts`. Types TypeScript en `frontend/src/types/`. Serialización `_id` → `id` vía `backend/src/utils/mapDocument.ts`.
 
 ## User
 
-Administrador único. Creado con `scripts/initApp.ts` (etapa 3).
+Administrador único. Creado con `backend/src/scripts/initApp.ts` (etapa 3).
 
 | Campo | Tipo | Obligatorio | Notas |
 |-------|------|-------------|-------|
@@ -45,7 +45,7 @@ Administrador único. Creado con `scripts/initApp.ts` (etapa 3).
 
 ### Enum `material`
 
-Valores permitidos:
+Valores permitidos (backend Zod + frontend selects):
 
 - `acetate`
 - `metal`
@@ -54,11 +54,9 @@ Valores permitidos:
 - `mixed`
 - `other`
 
-Validar con Zod en create/update.
-
 ### Unicidad (sin duplicados)
 
-**Unique compound index:** `{ brand: 1, model: 1, color: 1 }` (solo documentos con `deletedAt: null` — usar partial index si Mongoose lo soporta, o validar en service).
+**Unique compound index:** `{ brand: 1, model: 1, color: 1 }` (solo documentos con `deletedAt: null`).
 
 Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tripleta = **409 Conflict**.
 
@@ -66,12 +64,6 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 
 - Admin `DELETE /products/:id` → set `deletedAt: new Date()`, no borrar documento.
 - Queries públicas y listados excluyen `deletedAt != null`.
-- No aparece en catálogo ni en admin list (o admin list con filtro "archivados" — **fuera de MVP**, solo ocultos).
-
-### Imágenes
-
-- Archivo en disco vía Multer (etapa 2 infra, etapa 4 upload admin).
-- Schema guarda URL, no binario.
 
 ### Campos ausentes (por ahora)
 
@@ -81,17 +73,14 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 | `category` | MVP = solo armazones |
 | `stock` | No e-commerce |
 
-### Índices
-
-- `{ brand: 1, model: 1, color: 1 }` unique (partial: `deletedAt: null`)
-- `{ isPublished: 1, deletedAt: 1, brand: 1 }` — listado público paginado
-
-## DTOs (contrato JSON con el frontend)
+## DTOs (contrato JSON)
 
 ### ProductPublic
 
+Catálogo público y detalle. **Sin** `isPublished`, `deletedAt`, ni `price`.
+
 ```typescript
-{
+interface ProductPublic {
   id: string;
   brand: string;
   model: string;
@@ -104,8 +93,10 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 
 ### ProductAdmin
 
+Listado y formularios admin (etapa 4).
+
 ```typescript
-{
+interface ProductAdmin {
   id: string;
   brand: string;
   model: string;
@@ -122,7 +113,7 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 ### PaginatedProducts
 
 ```typescript
-{
+interface PaginatedProducts {
   items: ProductPublic[];
   total: number;
   page: number;
@@ -134,7 +125,7 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 ### AuthUser
 
 ```typescript
-{
+interface AuthUser {
   id: string;
   email: string;
   firstName: string;
@@ -143,11 +134,9 @@ Regla de negocio: mismo `brand + model` con **colores distintos** = OK. Misma tr
 }
 ```
 
-## Criterios de aceptación
+## Reglas de UI (frontend)
 
-- [ ] User con email único, firstName, lastName, password hasheado.
-- [ ] Product material solo valores del enum.
-- [ ] Unique brand+model+color (activos).
-- [ ] Soft delete vía `deletedAt`.
-- [ ] API nunca expone `_id`.
-- [ ] Sin campo price.
+- API expone `id` (string), nunca `_id`.
+- Sin imagen en `images[]` → mostrar `/images/not-found.png`.
+- **No** mostrar precios al público.
+- Soft-deleted o no publicados no aparecen en catálogo (el backend filtra; 404 en detalle).

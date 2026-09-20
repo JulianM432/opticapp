@@ -1,82 +1,54 @@
-# Etapa 3 — Auth admin (Backend)
+# Etapa 3 — Auth admin (Frontend)
 
 **Estado:** hecha  
 **Depende de:** Etapa 1
 
 ## Objetivo
 
-Login admin, JWT cookie 1d, permisos globales vía `permissions.json`.
+Login admin en `/admin`, sesión persistente vía cookie + `AuthContext`, dashboard con acceso a CRUD y perfil.
 
 ## Alcance
 
-- [x] Model `user.ts` (email, password, firstName, lastName, role).
-- [x] `scripts/initApp.ts`: crea **un** admin desde env si no existe (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_FIRST_NAME`, `ADMIN_LAST_NAME`).
-- [x] `configs/permissions.json` inicial.
-- [x] `services/auth.ts`, `controllers/auth.ts`, `routes/auth.ts`:
-  - `POST /auth/login` — público
-  - `POST /auth/logout`, `GET /auth/me` — protegidos
-- [x] `/auth/me` → `AuthUser` (id, email, firstName, lastName, role).
-- [x] Middlewares globales `authenticate` + `authorize` en `configs/app.ts`.
-- [x] Cookie: `httpOnly`, `sameSite: 'lax'`, **`secure: false` en dev**, `secure: true` en production.
-- [x] `JWT_EXPIRES_IN=1d`.
-- [x] Validación Zod login.
+- [x] `AuthContext` + `useAuth` + persistencia vía `/auth/me`.
+- [x] **`/admin`**: si no auth → login; si auth → dashboard.
+- [x] **`/admin/login`**: formulario (redirige a dashboard si ya logueado).
+- [x] **`/admin/profile`**: muestra email, firstName, lastName (solo lectura en MVP).
+- [x] Dashboard `/admin`: links a Productos (etapa 4) y Perfil.
+- [x] `ProtectedRoute` para rutas admin.
+- [x] **Home pública sin link a admin.**
 
 ## Fuera de alcance
 
 - CRUD productos (etapa 4).
-- Editar perfil (solo ver en MVP — frontend).
+- Editar perfil (solo ver en MVP).
 - Múltiples admins.
 - Refresh tokens.
-- UI admin (repo `opticapp-front`).
+- JWT, cookies y `permissions.json` (paquete `backend/`).
 
 ## Criterios de aceptación
 
-- [x] `pnpm exec tsx src/scripts/initApp.ts` crea admin único.
-- [x] Login OK → cookie + user JSON.
-- [x] Login fallido → 401, message español.
-- [x] `/auth/me` restaura sesión al recargar (cookie válida).
-- [x] JWT expira a 1d.
-- [x] Middlewares solo en `app.ts`.
-
-## `permissions.json` (etapa 3)
-
-```json
-{
-  "admin": [
-    { "route": "/auth/me",     "methods": ["GET"] },
-    { "route": "/auth/logout", "methods": ["POST"] }
-  ]
-}
-```
-
-## Variables de entorno
-
-```
-ADMIN_EMAIL=admin@opticapp.com
-ADMIN_PASSWORD=change-me
-ADMIN_FIRST_NAME=Admin
-ADMIN_LAST_NAME=Opticapp
-JWT_SECRET=change-me
-JWT_EXPIRES_IN=1d
-COOKIE_NAME=token
-```
+- [x] Login OK → user en context + cookie del backend.
+- [x] Login fallido → mensaje de error en español.
+- [x] `/auth/me` restaura sesión al recargar.
+- [x] `/admin` accesible solo escribiendo URL manualmente (sin link en home).
+- [x] Dashboard muestra acceso CRUD (placeholder) y perfil.
+- [x] Rutas admin protegidas con `ProtectedRoute`.
 
 ## Archivos esperados
 
 ```
-src/scripts/initApp.ts
-src/models/user.ts
-src/services/auth.ts
-src/controllers/auth.ts
-src/routes/auth.ts
-src/middlewares/authenticate.ts
-src/middlewares/authorize.ts
-src/validations/auth.ts
-src/helpers/hashPassword.ts
-src/configs/permissions.json
+src/types/auth.ts
+src/api/auth.ts
+src/context/AuthContext.tsx
+src/hooks/useAuth.ts
+src/pages/admin/LoginPage.tsx
+src/pages/admin/DashboardPage.tsx
+src/pages/admin/ProfilePage.tsx
+src/components/ProtectedRoute.tsx
+src/layouts/AdminLayout.tsx   (básico)
 ```
 
 ## Notas para el agente
 
-- No usar `seed-admin.ts`; usar **`initApp.ts`**.
-- Login response y `/auth/me` incluyen firstName, lastName.
+- `withCredentials: true` en todas las llamadas auth.
+- No usar `localStorage` para el token JWT.

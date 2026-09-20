@@ -6,5 +6,3 @@ dist/
 uploads/**
 !uploads/**/
 !uploads/**/.gitkeep
-
-pnpm-lock.yaml

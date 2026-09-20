@@ -5,7 +5,7 @@ export function resolveProductImageUrl(url: string): string {
     return url;
   }
 
-  const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+  const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
   const base = apiUrl.replace(/\/$/, '');
   const path = url.startsWith('/') ? url : `/${url}`;
   return `${base}${path}`;

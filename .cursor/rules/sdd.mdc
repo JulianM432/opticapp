@@ -1,31 +1,31 @@
 ---
-description: Spec-Driven Development — solo implementar la etapa activa de OpticApp (backend)
+description: Spec-Driven Development — solo implementar la etapa activa de OpticApp (monorepo)
 alwaysApply: true
 ---
 
-# SDD OpticApp — Backend
+# SDD OpticApp — Monorepo
 
 Antes de escribir código:
 
-1. Leer `SPECS.md` y confirmar cuál etapa está marcada como `activa`.
-2. Leer la spec de esa etapa en `specs/stages/` — **solo la sección Backend**.
+1. Leer `SPECS.md` en la raíz y confirmar cuál etapa está marcada como `activa`.
+2. Leer la spec de esa etapa en `specs/stages/` — **solo la sección que corresponda** (Backend o Frontend).
 3. Leer `specs/constitution.md` para restricciones globales.
 
 ## Reglas
 
-- Implementar **solo** lo listado en la etapa activa, **en este repo (backend)**.
-- **No** crear ni modificar archivos del frontend (`pages/`, `components/`, `hooks/`, etc. no existen aquí).
-- Si la etapa pide trabajo en el frontend, **no** implementarlo aquí; el owner lo hará en `opticapp-front`.
-- No adelantar etapas (auth, CRUD, CSV, Socket.io).
+- Implementar **solo** lo listado en la etapa activa.
+- Backend: archivos bajo `backend/src/`. Frontend: archivos bajo `frontend/src/`.
+- No adelantar etapas (auth, CRUD, WhatsApp, CSV).
 - No agregar features no especificadas ("mejoras" de regalo).
 - Si falta un criterio, **preguntar** al owner. No inventar.
-- Al terminar, verificar criterios de aceptación Backend de la spec de la etapa.
+- Al terminar, verificar criterios de aceptación de la spec de la etapa.
 
 ## Referencias
 
 - Constitución: `specs/constitution.md`
 - Arquitectura: `specs/architecture.md`
 - Modelo de datos: `specs/data-model.md`
+- UI / Tema: `specs/ui-theme.md`
 - Convenciones: `specs/conventions.md`
 
 ## Producto
