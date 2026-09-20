@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/empty';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { getMaterialLabel } from '@/constants/materials';
 import { useProduct } from '@/hooks/useProduct';
 
@@ -163,6 +164,12 @@ export function ProductDetailPage() {
               )}
 
               <Separator />
+
+              <WhatsAppButton
+                brand={product.brand}
+                color={product.color}
+                model={product.model}
+              />
 
               <p className="text-xs text-muted-foreground">
                 Consultá disponibilidad y probátelo en la óptica.

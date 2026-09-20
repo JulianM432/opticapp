@@ -42,8 +42,8 @@
 | 2 | Catálogo público + uploads | [02-public-catalog.md](specs/stages/02-public-catalog.md) | `hecha` |
 | 3 | Auth admin | [03-admin-auth.md](specs/stages/03-admin-auth.md) | `hecha` |
 | 4 | CRUD productos admin | [04-admin-products.md](specs/stages/04-admin-products.md) | `hecha` |
-| 5 | WhatsApp CTA | [05-whatsapp-cta.md](specs/stages/05-whatsapp-cta.md) | `activa` |
-| 6 | Import CSV/Excel | [06-import-csv.md](specs/stages/06-import-csv.md) | `pendiente` |
+| 5 | WhatsApp CTA | [05-whatsapp-cta.md](specs/stages/05-whatsapp-cta.md) | `hecha` |
+| 6 | Import CSV/Excel | [06-import-csv.md](specs/stages/06-import-csv.md) | `omitida` |
 
 ### Cómo avanzar de etapa
 

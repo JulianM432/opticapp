@@ -46,6 +46,7 @@ Ver [.env.example](.env.example):
 | Variable | Descripción |
 |----------|-------------|
 | `VITE_API_URL` | URL base del backend (ej. `http://localhost:5000`) |
+| `VITE_WHATSAPP_NUMBER` | Número de WhatsApp en formato internacional sin `+` (ej. `5493434123456`) |
 
 ## Scripts
 

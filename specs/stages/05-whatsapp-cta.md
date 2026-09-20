@@ -1,6 +1,6 @@
 # Etapa 5 — WhatsApp CTA (Frontend)
 
-**Estado:** pendiente  
+**Estado:** hecha
 **Depende de:** Etapa 2
 
 ## Objetivo
@@ -9,10 +9,10 @@ Botón "Consultar precio" en detalle de producto.
 
 ## Alcance
 
-- [ ] `helpers/whatsapp.ts`: `buildWhatsAppUrl(brand, model, color)`.
-- [ ] `components/WhatsAppButton.tsx`.
-- [ ] Integrar en `ProductDetailPage.tsx`.
-- [ ] `VITE_WHATSAPP_NUMBER` en `.env.example`.
+- [x] `helpers/whatsapp.ts`: `buildWhatsAppUrl(brand, model, color)`.
+- [x] `components/WhatsAppButton.tsx`.
+- [x] Integrar en `ProductDetailPage.tsx`.
+- [x] `VITE_WHATSAPP_NUMBER` en `.env.example`.
 
 ## Fuera de alcance
 
@@ -28,9 +28,9 @@ Mensaje: "Hola! Quiero consultar el precio del armazón {brand} {model} ({color}
 
 ## Criterios de aceptación
 
-- [ ] Botón visible solo en detalle de producto.
-- [ ] Abre WhatsApp con mensaje prellenado correcto.
-- [ ] Sin precio en UI.
+- [x] Botón visible solo en detalle de producto.
+- [x] Abre WhatsApp con mensaje prellenado correcto.
+- [x] Sin precio en UI.
 
 ## Archivos esperados
 

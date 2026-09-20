@@ -1,13 +1,13 @@
 # Etapa 6 — Import CSV/Excel (Frontend)
 
-**Estado:** pendiente  
+**Estado:** omitida
 **Depende de:** Etapa 4 (CRUD admin)
 
 ## Objetivo
 
 UI para que el admin importe productos en lote desde CSV o Excel.
 
-> **Nota:** Spec de alto nivel. Detalle al activar la etapa.
+> **Nota:** Etapa omitida por decisión del owner. No implementar.
 
 ## Alcance preliminar
 
@@ -35,5 +35,5 @@ public/templates/products-template.csv
 
 ## Notas para el agente
 
-- **No implementar** hasta que `SPECS.md` marque esta etapa como `activa`.
+- **No implementar.** Etapa omitida por decisión del owner.
 - Coordinar contrato con backend al activar.
