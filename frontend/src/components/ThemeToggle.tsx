@@ -1,10 +1,8 @@
 import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  ComputerIcon,
-  Moon01Icon,
-  Sun01Icon,
-  Tick02Icon,
-} from '@hugeicons/core-free-icons';
+import ComputerIcon from '@hugeicons/core-free-icons/ComputerIcon';
+import Moon01Icon from '@hugeicons/core-free-icons/Moon01Icon';
+import Sun01Icon from '@hugeicons/core-free-icons/Sun01Icon';
+import Tick02Icon from '@hugeicons/core-free-icons/Tick02Icon';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

@@ -1,9 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  ArrowLeft01Icon,
-  SunglassesIcon,
-} from '@hugeicons/core-free-icons';
+import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon';
+import SunglassesIcon from '@hugeicons/core-free-icons/SunglassesIcon';
 import { ProductDetailSkeleton } from '@/components/ProductDetailSkeleton';
 import { ProductGallery } from '@/components/ProductGallery';
 import { Badge } from '@/components/ui/badge';

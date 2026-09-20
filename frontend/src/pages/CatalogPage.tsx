@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { AlertCircleIcon, SunglassesIcon } from '@hugeicons/core-free-icons';
+import AlertCircleIcon from '@hugeicons/core-free-icons/AlertCircleIcon';
+import SunglassesIcon from '@hugeicons/core-free-icons/SunglassesIcon';
 import { CatalogPageBanner } from '@/components/CatalogPageBanner';
 import { CatalogPagination } from '@/components/CatalogPagination';
 import { ProductCard } from '@/components/ProductCard';

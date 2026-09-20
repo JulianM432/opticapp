@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  CallIcon,
-  Location01Icon,
-} from '@hugeicons/core-free-icons';
+import CallIcon from '@hugeicons/core-free-icons/CallIcon';
+import Location01Icon from '@hugeicons/core-free-icons/Location01Icon';
 import { Separator } from '@/components/ui/separator';
 import { STORE_INFO } from '@/constants/store';
 

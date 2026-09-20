@@ -7,12 +7,10 @@ import {
 } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
 import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  MonitorPauseIcon,
-  MonitorPlayIcon,
-} from '@hugeicons/core-free-icons';
+import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon';
+import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon';
+import MonitorPauseIcon from '@hugeicons/core-free-icons/MonitorPauseIcon';
+import MonitorPlayIcon from '@hugeicons/core-free-icons/MonitorPlayIcon';
 import { HERO_SLIDES } from '@/constants/hero';
 import { cn } from '@/lib/utils';
 

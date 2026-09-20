@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { AlertCircleIcon, SunglassesIcon } from '@hugeicons/core-free-icons';
+import AlertCircleIcon from '@hugeicons/core-free-icons/AlertCircleIcon';
+import SunglassesIcon from '@hugeicons/core-free-icons/SunglassesIcon';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductGridSkeleton } from '@/components/ProductGridSkeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
