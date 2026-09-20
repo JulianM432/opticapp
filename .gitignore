@@ -24,7 +24,9 @@ lerna-debug.log*
 uploads/**
 !uploads/**/
 !uploads/**/.gitkeep
-scripts/assets/**
+
+# Backend script assets (local seed images)
+backend/src/scripts/assets/
 
 # Editor directories and files
 .vscode/*
