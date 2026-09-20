@@ -5,3 +5,6 @@ packages:
 allowBuilds:
   esbuild: true
   bcrypt: true
+
+minimumReleaseAgeExclude:
+  - tsx@4.23.14
