@@ -1,0 +1,38 @@
+---
+description: Convenciones frontend Vite + React + Shadcn para OpticApp
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Frontend OpticApp
+
+## Capas
+
+`pages → hooks → api → backend`
+
+- Axios **solo** en `src/api/`. Un archivo por recurso: `product.ts`, `auth.ts`.
+- API como objeto exportado: `productApi`, `authApi`. Nunca funciones sueltas.
+- Nunca llamar Axios desde components ni pages.
+
+## UI
+
+- Textos visibles al usuario en **español**. Código en **inglés**.
+- Shadcn en `components/ui/`. `lib/utils.ts` solo para `cn()` (setup Shadcn).
+
+## Auth (etapa 3+)
+
+- `withCredentials: true`. Sesión vía cookie + `AuthContext` con `/auth/me`.
+- Dashboard en `/admin`. Login en `/admin/login`. `ProtectedRoute` para `/admin/*`.
+
+## Estilo
+
+- Ver `specs/conventions.md` (Prettier, `productApi` pattern).
+- Prohibido sufijo `.api.ts` — usar `api/product.ts`.
+
+## Prohibido
+
+- Mostrar precios al público.
+- Botón WhatsApp antes de etapa 5.
+- Crear archivos de backend en este repo.
+
+Ver `specs/architecture.md` para rutas y carpetas.
