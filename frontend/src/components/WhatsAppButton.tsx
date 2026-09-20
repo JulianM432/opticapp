@@ -1,5 +1,5 @@
 import { HugeiconsIcon } from '@hugeicons/react';
-import CallIcon from '@hugeicons/core-free-icons/CallIcon';
+import WhatsappIcon from '@hugeicons/core-free-icons/WhatsappIcon';
 import { Button } from '@/components/ui/button';
 import { buildWhatsAppUrl } from '@/helpers/whatsapp';
 
@@ -17,9 +17,13 @@ export function WhatsAppButton({ brand, model, color }: WhatsAppButtonProps) {
   }
 
   return (
-    <Button asChild className="w-full sm:w-auto" size="lg">
+    <Button asChild className="w-full sm:w-auto" size="lg" variant="whatsapp">
       <a href={href} rel="noopener noreferrer" target="_blank">
-        <HugeiconsIcon icon={CallIcon} strokeWidth={2} data-icon="inline-start" />
+        <HugeiconsIcon
+          icon={WhatsappIcon}
+          strokeWidth={2}
+          data-icon="inline-start"
+        />
         Consultar precio
       </a>
     </Button>
