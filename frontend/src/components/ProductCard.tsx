@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { useCallback, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
@@ -19,6 +19,19 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
     getProductImageSrc(product.images),
   );
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleImageLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleImageRef = useCallback(
+    (node: HTMLImageElement | null) => {
+      if (node?.complete && node.naturalWidth > 0) {
+        handleImageLoad();
+      }
+    },
+    [handleImageLoad],
+  );
 
   return (
     <div
@@ -45,7 +58,8 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
                   setImageSrc(PRODUCT_PLACEHOLDER_IMAGE);
                 }
               }}
-              onLoad={() => setIsLoaded(true)}
+              onLoad={handleImageLoad}
+              ref={handleImageRef}
               src={imageSrc}
               style={{
                 viewTransitionName: productViewTransitionName(product.id),

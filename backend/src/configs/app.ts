@@ -14,7 +14,6 @@ const __dirname = path.dirname(__filename);
 export const createApp = (): Express => {
   const app = express();
   const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:5173';
-
   app.use(express.json());
   app.use(
     cors({

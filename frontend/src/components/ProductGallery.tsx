@@ -50,6 +50,19 @@ export function ProductGallery({
 
   const activeSrc = getImageSrc(galleryImages[activeIndex], activeIndex);
 
+  const handleMainImageLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleMainImageRef = useCallback(
+    (node: HTMLImageElement | null) => {
+      if (node?.complete && node.naturalWidth > 0) {
+        handleMainImageLoad();
+      }
+    },
+    [handleMainImageLoad],
+  );
+
   return (
     <div className="flex flex-col gap-3">
       <div className="specimen-field overflow-hidden rounded-xl ring-1 ring-foreground/10">
@@ -63,7 +76,8 @@ export function ProductGallery({
             decoding="async"
             key={activeSrc}
             onError={() => markImageFailed(activeIndex)}
-            onLoad={() => setIsLoaded(true)}
+            onLoad={handleMainImageLoad}
+            ref={handleMainImageRef}
             src={activeSrc}
             style={{
               viewTransitionName: productViewTransitionName(productId),
