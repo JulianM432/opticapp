@@ -1,15 +1,15 @@
 # Opticapp
 
-Monorepo full-stack para **Opticapp**, vidriera de catálogo de armazones para una óptica. Sin e-commerce, sin precios públicos ni carrito.
+Monorepo full-stack para **Opticapp**, vidriera de catálogo de armazones para una óptica. Por ahora sin e-commerce, sin precios públicos ni carrito (a futuro).
 
 | Paquete | Descripción | Puerto dev |
 |---------|-------------|------------|
 | [`backend/`](backend/) | API REST (Express + MongoDB) | `5000` |
 | [`frontend/`](frontend/) | Interfaz web (React + Vite) | `5173` |
 
-Repositorio: [JulianM432/opticapp](https://github.com/JulianM432/opticapp) (privado).
-
 ## Spec-Driven Development
+
+Esta app se hizo como primera experiencia aplicando Spec-Driven Development, con Cursor.
 
 La documentación SDD vive en la raíz del monorepo:
 
