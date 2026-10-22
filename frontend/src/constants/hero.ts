@@ -7,15 +7,28 @@ export const HERO_COPY = {
 export const HERO_SLIDES = [
   {
     src: '/images/hero/hero-1.jpg',
-    alt: 'Persona con anteojos en un entorno elegante',
+    orientation: 'landscape',
+    alt: 'Anteojos de receta con armazón carey y metal dorado sobre un libro blanco',
   },
   {
     src: '/images/hero/hero-2.jpg',
-    alt: 'Anteojos de sol sobre una mesa',
+    orientation: 'landscape',
+    alt: 'Anteojos de sol redondos de metal dorado con lentes verdes sobre mármol',
   },
   {
     src: '/images/hero/hero-3.jpg',
-    alt: 'Modelo con armazones de diseño',
+    orientation: 'portrait',
+    alt: 'Anteojos de sol con lentes rosadas y armazón blanco entre hojas verdes',
+  },
+  {
+    src: '/images/hero/hero-4.jpg',
+    orientation: 'portrait',
+    alt: 'Armazones de colores, uno amarillo, exhibidos al sol',
+  },
+  {
+    src: '/images/hero/hero-5.jpg',
+    orientation: 'portrait',
+    alt: 'Anteojos de metal dorado sobre un paño de limpieza',
   },
 ] as const;
 
