@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import {
@@ -18,18 +18,17 @@ export function ProductGallery({
   images,
   productId,
 }: ProductGalleryProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  // State resets per product through the parent's `key`, not an effect: an effect
+  // keyed on `images` also fires on background refreshes and would hide an image
+  // that already loaded (same src, so onLoad never fires again).
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   const galleryImages =
     images.length > 0 ? images : [PRODUCT_PLACEHOLDER_IMAGE];
-
-  useEffect(() => {
-    setActiveIndex(0);
-    setFailedImages({});
-    setIsLoaded(false);
-  }, [images, productId]);
+  // A background refresh can return fewer images than the thumbnail picked.
+  const activeIndex = Math.min(selectedIndex, galleryImages.length - 1);
 
   const getImageSrc = useCallback(
     (image: string, index: number) => {
@@ -70,11 +69,10 @@ export function ProductGallery({
           <img
             alt={alt}
             className={cn(
-              'size-full object-cover transition-opacity duration-300',
+              'size-full object-cover transition-opacity duration-300 ease-out',
               isLoaded ? 'opacity-100' : 'opacity-0',
             )}
             decoding="async"
-            key={activeSrc}
             onError={() => markImageFailed(activeIndex)}
             onLoad={handleMainImageLoad}
             ref={handleMainImageRef}
@@ -106,10 +104,8 @@ export function ProductGallery({
                       ? 'ring-primary opacity-100'
                       : 'ring-foreground/10 opacity-70 hover:opacity-100',
                   )}
-                  onClick={() => {
-                    setActiveIndex(index);
-                    setIsLoaded(false);
-                  }}
+                  // Same <img>, new src: the current image stays up until the next one loads, no blank flash.
+                  onClick={() => setSelectedIndex(index)}
                   type="button"
                 >
                   <img
