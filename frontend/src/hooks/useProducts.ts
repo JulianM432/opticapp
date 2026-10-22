@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { getApiErrorMessage } from '@/api/client';
 import { productApi } from '@/api/product';
 import type { PaginatedProducts } from '@/types/product';
@@ -33,7 +32,6 @@ export function useProducts(page: number, limit = DEFAULT_LIMIT) {
         if (!cancelled) {
           setData(null);
           setError(message);
-          toast.error(message);
         }
       } finally {
         if (!cancelled) {

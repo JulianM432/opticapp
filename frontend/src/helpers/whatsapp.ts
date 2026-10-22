@@ -1,5 +1,16 @@
 const WHATSAPP_MESSAGE_TEMPLATE =
-  'Hola! Quiero consultar el precio del armazón {brand} {model} ({color}).';
+  '¡Hola! Quería consultar precio y disponibilidad del armazón {brand} {model} ({color}).';
+
+const WHATSAPP_CONTACT_MESSAGE = '¡Hola! Quería hacerles una consulta.';
+
+function getWhatsAppNumber(): string | null {
+  const number = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+  return number ? number : null;
+}
+
+function toWhatsAppUrl(number: string, message: string): string {
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+}
 
 export function buildWhatsAppMessage(
   brand: string,
@@ -11,17 +22,28 @@ export function buildWhatsAppMessage(
     .replace('{color}', color);
 }
 
+/** Product inquiry link. Returns `null` when no WhatsApp number is configured. */
 export function buildWhatsAppUrl(
   brand: string,
   model: string,
   color: string,
-): string {
-  const number = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+): string | null {
+  const number = getWhatsAppNumber();
 
   if (!number) {
-    return '';
+    return null;
   }
 
-  const message = buildWhatsAppMessage(brand, model, color);
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  return toWhatsAppUrl(number, buildWhatsAppMessage(brand, model, color));
+}
+
+/** Generic contact link. Returns `null` when no WhatsApp number is configured. */
+export function buildWhatsAppContactUrl(): string | null {
+  const number = getWhatsAppNumber();
+
+  if (!number) {
+    return null;
+  }
+
+  return toWhatsAppUrl(number, WHATSAPP_CONTACT_MESSAGE);
 }

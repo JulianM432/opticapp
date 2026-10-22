@@ -1,6 +1,15 @@
 import { useCallback, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
+import { HugeiconsIcon } from '@hugeicons/react';
+import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   getProductImageSrc,
   PRODUCT_PLACEHOLDER_IMAGE,
@@ -39,52 +48,62 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
       style={{ '--stagger': staggerIndex } as CSSProperties}
     >
       <Link
-        className="group flex h-full flex-col gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="group block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         to={`/products/${product.id}`}
         viewTransition
       >
-        <div className="overflow-hidden bg-muted">
-          <AspectRatio ratio={1}>
-            <img
-              alt={`${product.brand} ${product.model}`}
-              className={cn(
-                'size-full object-contain p-4 transition-[transform,opacity] duration-500 group-hover:scale-[1.03]',
-                isLoaded ? 'opacity-100' : 'opacity-0',
-              )}
-              decoding="async"
-              loading="lazy"
-              onError={() => {
-                if (imageSrc !== PRODUCT_PLACEHOLDER_IMAGE) {
-                  setImageSrc(PRODUCT_PLACEHOLDER_IMAGE);
-                }
-              }}
-              onLoad={handleImageLoad}
-              ref={handleImageRef}
-              src={imageSrc}
-              style={{
-                viewTransitionName: productViewTransitionName(product.id),
-              }}
-            />
-          </AspectRatio>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-baseline justify-between gap-2">
-            <p className="truncate text-xs text-muted-foreground">
-              {product.brand}
-            </p>
-            <p className="shrink-0 text-xs text-muted-foreground">
-              {product.color}
-            </p>
+        <Card className="h-full gap-3 pt-0 transition-shadow group-hover:shadow-md">
+          <div className="overflow-hidden bg-muted">
+            <AspectRatio ratio={1}>
+              <img
+                alt=""
+                className={cn(
+                  'size-full object-contain p-4 transition-[transform,opacity] duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100',
+                  isLoaded ? 'opacity-100' : 'opacity-0',
+                )}
+                decoding="async"
+                loading="lazy"
+                onError={() => {
+                  if (imageSrc !== PRODUCT_PLACEHOLDER_IMAGE) {
+                    setImageSrc(PRODUCT_PLACEHOLDER_IMAGE);
+                  }
+                }}
+                onLoad={handleImageLoad}
+                ref={handleImageRef}
+                src={imageSrc}
+                style={{
+                  viewTransitionName: productViewTransitionName(product.id),
+                }}
+              />
+            </AspectRatio>
           </div>
-          <p className="text-label text-sm font-semibold text-foreground">
-            {product.model}
-          </p>
-        </div>
 
-        <span className="text-label mt-auto inline-flex h-9 w-full items-center justify-center bg-foreground text-[0.65rem] font-medium text-background transition-colors group-hover:bg-foreground/90">
-          Ver modelo
-        </span>
+          <CardHeader className="gap-1">
+            <CardDescription className="flex min-w-0 items-baseline justify-between gap-3">
+              <span className="max-w-[65%] shrink-0 truncate">
+                {product.brand}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-right">
+                {product.color}
+              </span>
+            </CardDescription>
+            <CardTitle className="line-clamp-2 text-foreground">
+              {product.model}
+            </CardTitle>
+          </CardHeader>
+
+          <CardFooter className="mt-auto">
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors group-hover:text-foreground group-focus-visible:text-foreground">
+              Ver modelo
+              <HugeiconsIcon
+                aria-hidden="true"
+                className="size-3.5 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                icon={ArrowRight01Icon}
+                strokeWidth={2}
+              />
+            </span>
+          </CardFooter>
+        </Card>
       </Link>
     </div>
   );

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { getApiErrorMessage, getApiErrorStatus } from '@/api/client';
 import { productApi } from '@/api/product';
 import type { ProductPublic } from '@/types/product';
@@ -42,7 +41,6 @@ export function useProduct(id: string | undefined) {
           setProduct(null);
           setIsNotFound(getApiErrorStatus(err) === 404);
           setError(message);
-          toast.error(message);
         }
       } finally {
         if (!cancelled) {

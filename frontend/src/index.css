@@ -45,6 +45,9 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
   --font-heading: var(--font-sans);
+  --color-on-media: var(--on-media);
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1rem;
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
@@ -58,7 +61,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.588 0.158 241.966);
+  --primary: oklch(0.52 0.15 242);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -67,8 +70,9 @@
   --accent: oklch(0.97 0.01 241);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --whatsapp: oklch(0.62 0.18 150);
+  --whatsapp: oklch(0.5 0.14 150);
   --whatsapp-foreground: oklch(0.99 0 0);
+  --on-media: oklch(1 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.588 0.158 241.966);
@@ -110,8 +114,9 @@
   --accent: oklch(0.269 0.02 241);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --whatsapp: oklch(0.62 0.18 150);
+  --whatsapp: oklch(0.5 0.14 150);
   --whatsapp-foreground: oklch(0.99 0 0);
+  --on-media: oklch(1 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.746 0.16 232.661);

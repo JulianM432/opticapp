@@ -37,4 +37,24 @@ export function getPaginationItems(
   return buildPageItems(current, total);
 }
 
+/**
+ * Builds the search string for a catalog page, keeping any other params.
+ * Page 1 drops the `page` param so the canonical URL stays clean.
+ */
+export function getPageSearch(
+  searchParams: URLSearchParams,
+  page: number,
+): string {
+  const next = new URLSearchParams(searchParams);
+
+  if (page <= 1) {
+    next.delete('page');
+  } else {
+    next.set('page', String(page));
+  }
+
+  const search = next.toString();
+  return search ? `?${search}` : '';
+}
+
 export type { PageItem };

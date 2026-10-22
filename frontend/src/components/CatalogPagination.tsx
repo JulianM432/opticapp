@@ -1,4 +1,10 @@
-import { useCallback } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
+import {
+  useHref,
+  useLinkClickHandler,
+  useSearchParams,
+  type To,
+} from 'react-router-dom';
 import {
   Pagination,
   PaginationContent,
@@ -8,98 +14,155 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { getPaginationItems } from '@/helpers/pagination';
+import { getPageSearch, getPaginationItems } from '@/helpers/pagination';
+import { cn } from '@/lib/utils';
 
 type CatalogPaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 };
+
+type PageLinkKind = 'page' | 'previous' | 'next';
+
+type CatalogPageLinkProps = {
+  kind: PageLinkKind;
+  to: To | null;
+  isActive?: boolean;
+  children?: ReactNode;
+};
+
+const LINK_LABELS: Record<Exclude<PageLinkKind, 'page'>, string> = {
+  previous: 'Ir a la página anterior',
+  next: 'Ir a la página siguiente',
+};
+
+function scrollToGrid() {
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches;
+
+  document.getElementById('catalog-grid')?.scrollIntoView({
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    block: 'start',
+  });
+}
+
+function CatalogPageLink({
+  kind,
+  to,
+  isActive,
+  children,
+}: CatalogPageLinkProps) {
+  const href = useHref(to ?? {});
+  const handleLinkClick = useLinkClickHandler(to ?? {});
+  const isDisabled = to === null;
+
+  const linkProps = isDisabled
+    ? {
+        'aria-disabled': true,
+        role: 'link',
+      }
+    : {
+        href,
+        onClick: (event: MouseEvent<HTMLAnchorElement>) => {
+          if (isActive) {
+            event.preventDefault();
+            return;
+          }
+
+          handleLinkClick(event);
+          if (event.defaultPrevented) {
+            scrollToGrid();
+          }
+        },
+      };
+
+  if (kind === 'page') {
+    return (
+      <PaginationLink
+        className="size-11 sm:size-8"
+        isActive={isActive}
+        {...linkProps}
+      >
+        {children}
+      </PaginationLink>
+    );
+  }
+
+  const Component = kind === 'previous' ? PaginationPrevious : PaginationNext;
+
+  return (
+    <Component
+      aria-label={LINK_LABELS[kind]}
+      className={cn(
+        'h-11 min-w-11 sm:h-8 sm:min-w-0',
+        isDisabled && 'pointer-events-none opacity-50',
+      )}
+      text={kind === 'previous' ? 'Anterior' : 'Siguiente'}
+      {...linkProps}
+    />
+  );
+}
 
 export function CatalogPagination({
   currentPage,
   totalPages,
-  onPageChange,
 }: CatalogPaginationProps) {
+  const [searchParams] = useSearchParams();
   const pageItems = getPaginationItems(currentPage, totalPages);
-
-  const goToPage = useCallback(
-    (page: number) => {
-      if (page < 1 || page > totalPages || page === currentPage) {
-        return;
-      }
-
-      onPageChange(page);
-      document.getElementById('catalog-grid')?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    },
-    [currentPage, onPageChange, totalPages],
-  );
 
   if (totalPages <= 1) {
     return null;
   }
 
+  const toPage = (page: number): To | null =>
+    page < 1 || page > totalPages
+      ? null
+      : { search: getPageSearch(searchParams, page) };
+
+  const pageStatus = `Página ${currentPage} de ${totalPages}`;
+
   return (
-    <Pagination className="justify-center sm:justify-between">
+    <Pagination
+      aria-label="Páginas del catálogo"
+      className="items-center sm:justify-between"
+    >
       <p className="hidden text-sm text-muted-foreground sm:block">
-        Página {currentPage} de {totalPages}
+        {pageStatus}
       </p>
 
-      <PaginationContent>
+      <PaginationContent className="w-full justify-between sm:w-auto sm:justify-end">
         <PaginationItem>
-          <PaginationPrevious
-            aria-disabled={currentPage <= 1}
-            className={
-              currentPage <= 1 ? 'pointer-events-none opacity-50' : undefined
-            }
-            href="#"
-            onClick={(event) => {
-              event.preventDefault();
-              goToPage(currentPage - 1);
-            }}
-            text="Anterior"
-          />
+          <CatalogPageLink kind="previous" to={toPage(currentPage - 1)} />
+        </PaginationItem>
+
+        <PaginationItem className="text-sm text-muted-foreground sm:hidden">
+          {pageStatus}
         </PaginationItem>
 
         {pageItems.map((item, index) =>
           item === 'ellipsis' ? (
-            <PaginationItem key={`ellipsis-${index}`}>
+            <PaginationItem
+              className="hidden sm:block"
+              key={`ellipsis-${index}`}
+            >
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={item}>
-              <PaginationLink
-                href="#"
+            <PaginationItem className="hidden sm:block" key={item}>
+              <CatalogPageLink
                 isActive={item === currentPage}
-                onClick={(event) => {
-                  event.preventDefault();
-                  goToPage(item);
-                }}
+                kind="page"
+                to={toPage(item)}
               >
                 {item}
-              </PaginationLink>
+              </CatalogPageLink>
             </PaginationItem>
           ),
         )}
 
         <PaginationItem>
-          <PaginationNext
-            aria-disabled={currentPage >= totalPages}
-            className={
-              currentPage >= totalPages
-                ? 'pointer-events-none opacity-50'
-                : undefined
-            }
-            href="#"
-            onClick={(event) => {
-              event.preventDefault();
-              goToPage(currentPage + 1);
-            }}
-            text="Siguiente"
-          />
+          <CatalogPageLink kind="next" to={toPage(currentPage + 1)} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
