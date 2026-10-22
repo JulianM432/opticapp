@@ -46,6 +46,8 @@
   --color-sidebar: var(--sidebar);
   --font-heading: var(--font-sans);
   --color-on-media: var(--on-media);
+  /* Strong ease-out for UI entrances; overrides Tailwind's weak default `ease-out`. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --text-eyebrow: 0.75rem;
   --text-eyebrow--line-height: 1rem;
   --radius-2xl: calc(var(--radius) * 1.8);
@@ -168,9 +170,10 @@
     background: var(--specimen-glow), var(--color-muted);
   }
 
+  /* Capped stagger: the sixth card onward enters with the fifth, so a full page settles in ~0.65s. */
   .catalog-grid-enter {
-    animation: catalog-fade-up 0.5s ease both;
-    animation-delay: calc(var(--stagger, 0) * 60ms);
+    animation: catalog-fade-up 400ms var(--ease-out) both;
+    animation-delay: calc(min(var(--stagger, 0), 5) * 50ms);
   }
 
   @keyframes catalog-fade-up {
@@ -185,9 +188,17 @@
     }
   }
 
+  @keyframes catalog-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* Reduced motion keeps the fade and drops the movement. */
   @media (prefers-reduced-motion: reduce) {
     .catalog-grid-enter {
-      animation: none;
+      animation-name: catalog-fade;
+      animation-delay: 0ms;
     }
   }
 }
