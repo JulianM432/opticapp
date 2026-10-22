@@ -1,7 +1,7 @@
 export const STORE_INFO = {
-  name: 'Optica Bovril',
-  address: 'Fake Address 1234',
-  phone: '3434123456',
+  name: import.meta.env.VITE_STORE_NAME ?? 'Optica',
+  address: import.meta.env.VITE_ADDRESS ?? 'Fake Address 1234',
+  phone: import.meta.env.VITE_WHATSAPP_NUMBER ?? '3434123456',
   /** Human-readable phone, for visible labels. */
   phoneDisplay: '343 412-3456',
   /** E.164 phone, for `tel:` links. */
