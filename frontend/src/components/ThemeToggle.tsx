@@ -2,12 +2,14 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import ComputerIcon from '@hugeicons/core-free-icons/ComputerIcon';
 import Moon01Icon from '@hugeicons/core-free-icons/Moon01Icon';
 import Sun01Icon from '@hugeicons/core-free-icons/Sun01Icon';
-import Tick02Icon from '@hugeicons/core-free-icons/Tick02Icon';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme, type Theme } from '@/components/theme-provider';
@@ -24,47 +26,57 @@ const THEME_ICONS: Record<Theme, typeof Sun01Icon> = {
   system: ComputerIcon,
 };
 
+const THEME_OPTIONS = Object.keys(THEME_LABELS) as Theme[];
+
+function isTheme(value: string): value is Theme {
+  return value in THEME_LABELS;
+}
+
 type ThemeToggleProps = {
-  variant?: 'default' | 'ghost-light';
+  align?: 'start' | 'center' | 'end';
 };
 
-export function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
+export function ThemeToggle({ align = 'end' }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
   const CurrentIcon = THEME_ICONS[theme];
-  const isGhostLight = variant === 'ghost-light';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           aria-label={`Tema: ${THEME_LABELS[theme]}. Elegir apariencia.`}
-          className={
-            isGhostLight
-              ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 hover:text-white'
-              : undefined
-          }
+          className="min-h-11 min-w-11 sm:min-h-9 sm:min-w-9"
           size="sm"
           type="button"
-          variant={isGhostLight ? 'outline' : 'outline'}
+          variant="outline"
         >
-          <HugeiconsIcon icon={CurrentIcon} strokeWidth={2} data-icon="inline-start" />
+          <HugeiconsIcon
+            icon={CurrentIcon}
+            strokeWidth={2}
+            data-icon="inline-start"
+          />
           <span className="hidden sm:inline">{THEME_LABELS[theme]}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {(Object.keys(THEME_LABELS) as Theme[]).map((option) => (
-          <DropdownMenuItem key={option} onClick={() => setTheme(option)}>
-            <HugeiconsIcon icon={THEME_ICONS[option]} strokeWidth={2} />
-            {THEME_LABELS[option]}
-            {theme === option && (
-              <HugeiconsIcon
-                className="ml-auto"
-                icon={Tick02Icon}
-                strokeWidth={2}
-              />
-            )}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align={align}>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Apariencia</DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            onValueChange={(value) => {
+              if (isTheme(value)) {
+                setTheme(value);
+              }
+            }}
+            value={theme}
+          >
+            {THEME_OPTIONS.map((option) => (
+              <DropdownMenuRadioItem key={option} value={option}>
+                <HugeiconsIcon icon={THEME_ICONS[option]} strokeWidth={2} />
+                {THEME_LABELS[option]}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

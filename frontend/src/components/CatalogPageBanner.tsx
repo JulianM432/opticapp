@@ -17,7 +17,11 @@ export function CatalogPageBanner() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/" viewTransition>
+                <Link
+                  className="inline-flex min-h-11 items-center sm:min-h-0"
+                  to="/"
+                  viewTransition
+                >
                   Inicio
                 </Link>
               </BreadcrumbLink>
@@ -44,12 +48,16 @@ export function CatalogPageBanner() {
           aria-hidden
           className="absolute inset-0 bg-linear-to-r from-black/50 to-black/20"
         />
-        <h1
-          className="text-display absolute inset-x-0 bottom-0 px-4 pb-6 font-heading text-3xl font-semibold tracking-tight text-white sm:px-6 sm:text-4xl"
-          id="catalog-banner-title"
-        >
-          Catálogo
-        </h1>
+        <div className="absolute inset-0 flex items-end">
+          <div className="mx-auto w-full max-w-7xl px-4 pb-6 sm:px-6">
+            <h1
+              className="text-display font-heading text-3xl font-semibold tracking-tight text-balance text-on-media sm:text-4xl"
+              id="catalog-banner-title"
+            >
+              Catálogo
+            </h1>
+          </div>
+        </div>
       </section>
     </div>
   );

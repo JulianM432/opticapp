@@ -30,7 +30,7 @@ export function CatalogPreview() {
         >
           Nuestro catálogo
         </h2>
-        <Button asChild className="w-fit" variant="outline">
+        <Button asChild className="w-fit max-sm:h-11" variant="outline">
           <Link to="/catalogo" viewTransition>
             Ver todos
           </Link>

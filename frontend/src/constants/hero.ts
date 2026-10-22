@@ -1,3 +1,9 @@
+export const HERO_COPY = {
+  title: 'Encontrá los anteojos que van con vos',
+  description:
+    'Mirá los armazones del catálogo y vení a probártelos a la óptica. Te esperamos.',
+} as const;
+
 export const HERO_SLIDES = [
   {
     src: '/images/hero/hero-1.jpg',

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { StoreLogo } from '@/components/StoreLogo';
 import { cn } from '@/lib/utils';
 import { STORE_INFO } from '@/constants/store';
+
+const navLinkClassName =
+  'inline-flex h-11 items-center rounded-md px-2 text-sm font-medium transition-colors sm:px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
 export function PublicHeader() {
   const { pathname } = useLocation();
@@ -36,40 +39,50 @@ export function PublicHeader() {
           : 'border-b border-border/60 bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/70',
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
         <Link
           className={cn(
-            'flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            isTransparent && 'text-white',
+            'flex min-h-11 min-w-0 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            isTransparent && 'text-on-media',
           )}
           to="/"
         >
-          <img
-            alt=""
-            className={cn('size-8', isTransparent && 'brightness-0 invert')}
-            src="/logo.svg"
-          />
-          <span className="font-heading text-base font-semibold tracking-tight">
+          <StoreLogo className="size-8" />
+          <span className="truncate font-heading text-base font-semibold tracking-tight">
             {STORE_INFO.name}
           </span>
         </Link>
 
         <nav
           aria-label="Principal"
-          className="flex items-center gap-3 sm:gap-4"
+          className="flex shrink-0 items-center gap-1"
         >
-          <Link
-            className={cn(
-              'text-label rounded-md px-2 py-1 text-[0.65rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              isTransparent
-                ? 'text-white/90 hover:text-white'
-                : 'text-muted-foreground hover:text-foreground',
-            )}
+          <NavLink
+            className={({ isActive }) =>
+              cn(
+                navLinkClassName,
+                isTransparent
+                  ? 'text-on-media/90 hover:text-on-media'
+                  : isActive
+                    ? 'text-foreground'
+                    : 'text-muted-foreground hover:text-foreground',
+              )
+            }
             to="/catalogo"
           >
             Catálogo
-          </Link>
-          <ThemeToggle variant={isTransparent ? 'ghost-light' : 'default'} />
+          </NavLink>
+          <a
+            className={cn(
+              navLinkClassName,
+              isTransparent
+                ? 'text-on-media/90 hover:text-on-media'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+            href="#contacto"
+          >
+            Contacto
+          </a>
         </nav>
       </div>
     </header>

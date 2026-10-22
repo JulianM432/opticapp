@@ -19,9 +19,8 @@ export function ProductDetailSkeleton() {
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-4 w-20" />
           <Skeleton className="h-10 w-3/4" />
-          <Skeleton className="h-6 w-1/2" />
         </div>
 
         <Separator />
@@ -37,7 +36,12 @@ export function ProductDetailSkeleton() {
           </div>
         </dl>
 
-        <Skeleton className="h-20 w-full" />
+        <Separator />
+
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-4 w-full max-w-sm" />
+          <Skeleton className="h-12 w-full rounded-md sm:w-60" />
+        </div>
       </div>
     </article>
   );

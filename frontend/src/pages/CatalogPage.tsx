@@ -31,10 +31,6 @@ export function CatalogPage() {
   const page = parsePage(searchParams.get('page'));
   const { data, isLoading, error, refetch } = useProducts(page);
 
-  const goToPage = (nextPage: number) => {
-    setSearchParams(nextPage <= 1 ? {} : { page: String(nextPage) });
-  };
-
   useEffect(() => {
     if (!data) {
       return;
@@ -42,7 +38,16 @@ export function CatalogPage() {
 
     if (data.totalPages > 0 && page > data.totalPages) {
       setSearchParams(
-        data.totalPages <= 1 ? {} : { page: String(data.totalPages) },
+        (current) => {
+          const next = new URLSearchParams(current);
+          if (data.totalPages <= 1) {
+            next.delete('page');
+          } else {
+            next.set('page', String(data.totalPages));
+          }
+          return next;
+        },
+        { replace: true },
       );
     }
   }, [data, page, setSearchParams]);
@@ -53,15 +58,16 @@ export function CatalogPage() {
 
       <section
         aria-labelledby="catalog-grid-heading"
-        className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 sm:py-10"
+        className="mx-auto flex max-w-7xl scroll-mt-16 flex-col gap-8 px-4 py-8 sm:px-6 sm:py-10"
         id="catalog-grid"
       >
-        <div className="flex items-center justify-end border-b border-border/60 pb-4">
+        <h2 className="sr-only" id="catalog-grid-heading">
+          Armazones disponibles
+        </h2>
+
+        <div className="flex min-h-8 items-center justify-end border-b border-border/60 pb-4">
           {!isLoading && data && data.total > 0 && (
-            <p
-              className="text-label text-[0.65rem] font-medium text-muted-foreground"
-              id="catalog-grid-heading"
-            >
+            <p className="text-label text-eyebrow font-medium text-muted-foreground tabular-nums">
               {data.total}{' '}
               {data.total === 1 ? 'producto' : 'productos'}
             </p>
@@ -119,7 +125,6 @@ export function CatalogPage() {
 
               <CatalogPagination
                 currentPage={Math.min(page, data.totalPages)}
-                onPageChange={goToPage}
                 totalPages={data.totalPages}
               />
             </div>

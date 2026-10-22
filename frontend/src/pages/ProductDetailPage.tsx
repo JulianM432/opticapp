@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
+import AlertCircleIcon from '@hugeicons/core-free-icons/AlertCircleIcon';
 import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon';
 import SunglassesIcon from '@hugeicons/core-free-icons/SunglassesIcon';
 import { ProductDetailSkeleton } from '@/components/ProductDetailSkeleton';
@@ -23,21 +25,43 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { getMaterialLabel } from '@/constants/materials';
+import { STORE_INFO } from '@/constants/store';
 import { useProduct } from '@/hooks/useProduct';
+
+// Breadcrumb links get a 44px touch target on mobile; desktop keeps the compact row.
+const BREADCRUMB_LINK_CLASSES = 'inline-flex min-h-11 items-center sm:min-h-0';
+
+function useProductDocumentTitle(brand?: string, model?: string) {
+  useEffect(() => {
+    if (!brand || !model) {
+      return;
+    }
+
+    const previousTitle = document.title;
+    document.title = `${brand} ${model} — ${STORE_INFO.name}`;
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [brand, model]);
+}
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { product, isLoading, isNotFound, error, refetch } = useProduct(id);
+
+  useProductDocumentTitle(product?.brand, product?.model);
 
   return (
     <section className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 sm:py-10">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
+            <BreadcrumbLink asChild className={BREADCRUMB_LINK_CLASSES}>
               <Link to="/" viewTransition>
                 Inicio
               </Link>
@@ -45,7 +69,7 @@ export function ProductDetailPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
+            <BreadcrumbLink asChild className={BREADCRUMB_LINK_CLASSES}>
               <Link to="/catalogo" viewTransition>
                 Catálogo
               </Link>
@@ -53,7 +77,9 @@ export function ProductDetailPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            {product ? (
+            {isLoading ? (
+              <Skeleton aria-hidden className="h-3 w-28" />
+            ) : product ? (
               <BreadcrumbPage>
                 {product.brand} {product.model}
               </BreadcrumbPage>
@@ -79,7 +105,7 @@ export function ProductDetailPage() {
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button asChild variant="outline">
+              <Button asChild className="max-sm:h-11" variant="outline">
                 <Link to="/catalogo" viewTransition>
                   <HugeiconsIcon
                     icon={ArrowLeft01Icon}
@@ -95,6 +121,7 @@ export function ProductDetailPage() {
 
         {!isLoading && !product && !isNotFound && error && (
           <Alert variant="destructive">
+            <HugeiconsIcon icon={AlertCircleIcon} strokeWidth={2} />
             <AlertTitle>Error al cargar el armazón</AlertTitle>
             <AlertDescription className="flex flex-col gap-3">
               <span>{error}</span>
@@ -121,15 +148,12 @@ export function ProductDetailPage() {
 
             <div className="flex flex-col gap-6">
               <header className="flex flex-col gap-2">
-                <p className="text-label text-[0.65rem] font-medium text-primary">
+                <p className="text-label text-eyebrow font-medium text-foreground">
                   {product.brand}
                 </p>
-                <h1 className="text-display font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+                <h1 className="text-display font-heading text-3xl font-semibold tracking-tight text-balance wrap-anywhere sm:text-4xl">
                   {product.model}
                 </h1>
-                <p className="text-base text-muted-foreground">
-                  {product.color}
-                </p>
               </header>
 
               <Separator />
@@ -153,7 +177,7 @@ export function ProductDetailPage() {
                 <>
                   <Separator />
                   <div className="flex flex-col gap-2">
-                    <h2 className="text-label text-[0.65rem] font-medium text-muted-foreground">
+                    <h2 className="text-label text-eyebrow font-medium text-muted-foreground">
                       Descripción
                     </h2>
                     <p className="max-w-prose text-sm/relaxed text-muted-foreground">
@@ -165,15 +189,25 @@ export function ProductDetailPage() {
 
               <Separator />
 
-              <WhatsAppButton
-                brand={product.brand}
-                color={product.color}
-                model={product.model}
-              />
-
-              <p className="text-xs text-muted-foreground">
-                Consultá disponibilidad y probátelo en la óptica.
+              <p className="text-sm/relaxed text-muted-foreground">
+                Consultá precio y disponibilidad, y vení a probártelo a la
+                óptica.
               </p>
+
+              {/*
+                Mobile: sticky bottom bar. It is a direct child of this column so
+                it sticks while the product is on screen, stays in the flow (no
+                content hidden behind it) and never covers the footer.
+                sm+: a regular button right under its supporting line.
+              */}
+              <div className="sticky bottom-0 -mx-4 -mt-3 border-t border-border/60 bg-background px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0">
+                <WhatsAppButton
+                  brand={product.brand}
+                  className="w-full sm:w-auto"
+                  color={product.color}
+                  model={product.model}
+                />
+              </div>
             </div>
           </article>
         )}

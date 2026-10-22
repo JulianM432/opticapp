@@ -3,11 +3,13 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ScrollToTop } from '@/components/ScrollToTop';
 import { AuthProvider } from '@/context/AuthContext';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { CatalogPage } from '@/pages/CatalogPage';
 import { HomePage } from '@/pages/HomePage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 import { ProductDetailPage } from '@/pages/ProductDetailPage';
 import { DashboardPage } from '@/pages/admin/DashboardPage';
 import { LoginPage } from '@/pages/admin/LoginPage';
@@ -20,6 +22,7 @@ function App() {
     <ThemeProvider defaultTheme="system" storageKey="theme">
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <TooltipProvider>
             <Toaster />
             <Routes>
@@ -27,6 +30,7 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path="catalogo" element={<CatalogPage />} />
                 <Route path="products/:id" element={<ProductDetailPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Route>
 
               <Route path="/admin/login" element={<LoginPage />} />
