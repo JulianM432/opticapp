@@ -23,6 +23,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { StoreLogo } from '@/components/StoreLogo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/hooks/useAuth';
 import { STORE_INFO } from '@/constants/store';
@@ -74,7 +75,7 @@ export function AdminLayout() {
       <Sidebar collapsible="icon" variant="inset">
         <SidebarHeader className="border-b border-sidebar-border">
           <div className="flex items-center gap-3 px-2 py-1">
-            <img alt="Opticapp" className="size-8 shrink-0" src="/logo.svg" />
+            <StoreLogo className="size-8" />
             <div className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
               <span className="truncate text-sm font-semibold">
                 {STORE_INFO.name}

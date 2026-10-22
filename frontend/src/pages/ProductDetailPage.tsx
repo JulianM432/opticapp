@@ -142,6 +142,7 @@ export function ProductDetailPage() {
           <article className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <ProductGallery
               alt={`${product.brand} ${product.model}`}
+              key={product.id}
               images={product.images}
               productId={product.id}
             />

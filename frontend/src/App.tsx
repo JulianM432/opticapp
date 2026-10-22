@@ -1,9 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  ScrollRestoration,
+} from 'react-router-dom';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { ScrollToTop } from '@/components/ScrollToTop';
 import { AuthProvider } from '@/context/AuthContext';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { PublicLayout } from '@/layouts/PublicLayout';
@@ -17,39 +21,58 @@ import { ProductFormPage } from '@/pages/admin/ProductFormPage';
 import { ProductsListPage } from '@/pages/admin/ProductsListPage';
 import { ProfilePage } from '@/pages/admin/ProfilePage';
 
+// Data router: `viewTransition` on links and <ScrollRestoration> only work in this mode.
+function RootLayout() {
+  return (
+    <>
+      <ScrollRestoration />
+      <Outlet />
+    </>
+  );
+}
+
+const router = createBrowserRouter([
+  {
+    element: <RootLayout />,
+    children: [
+      {
+        element: <PublicLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: 'catalogo', element: <CatalogPage /> },
+          { path: 'products/:id', element: <ProductDetailPage /> },
+          { path: '*', element: <NotFoundPage /> },
+        ],
+      },
+      { path: '/admin/login', element: <LoginPage /> },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '/admin',
+            element: <AdminLayout />,
+            children: [
+              { index: true, element: <DashboardPage /> },
+              { path: 'profile', element: <ProfilePage /> },
+              { path: 'products', element: <ProductsListPage /> },
+              { path: 'products/new', element: <ProductFormPage /> },
+              { path: 'products/:id/edit', element: <ProductFormPage /> },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);
+
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="theme">
       <AuthProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <TooltipProvider>
-            <Toaster />
-            <Routes>
-              <Route element={<PublicLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="catalogo" element={<CatalogPage />} />
-                <Route path="products/:id" element={<ProductDetailPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Route>
-
-              <Route path="/admin/login" element={<LoginPage />} />
-
-              <Route element={<ProtectedRoute />}>
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<DashboardPage />} />
-                  <Route path="profile" element={<ProfilePage />} />
-                  <Route path="products" element={<ProductsListPage />} />
-                  <Route path="products/new" element={<ProductFormPage />} />
-                  <Route
-                    path="products/:id/edit"
-                    element={<ProductFormPage />}
-                  />
-                </Route>
-              </Route>
-            </Routes>
-          </TooltipProvider>
-        </BrowserRouter>
+        <TooltipProvider>
+          <Toaster />
+          <RouterProvider router={router} />
+        </TooltipProvider>
       </AuthProvider>
     </ThemeProvider>
   );

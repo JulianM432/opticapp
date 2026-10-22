@@ -1,5 +1,5 @@
 import { useCallback, useState, type CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useViewTransitionState } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
 import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -21,9 +21,18 @@ import type { ProductPublic } from '@/types/product';
 type ProductCardProps = {
   product: ProductPublic;
   staggerIndex?: number;
+  /** Off when the grid was already on screen (back navigation, cached page). */
+  animateEntrance?: boolean;
 };
 
-export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
+export function ProductCard({
+  product,
+  staggerIndex = 0,
+  animateEntrance = true,
+}: ProductCardProps) {
+  const href = `/products/${product.id}`;
+  // Only the card being opened (or returned to) shares its image with the detail page.
+  const isTransitioning = useViewTransitionState(href);
   const [imageSrc, setImageSrc] = useState(() =>
     getProductImageSrc(product.images),
   );
@@ -44,12 +53,12 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
 
   return (
     <div
-      className="catalog-grid-enter h-full"
+      className={cn('h-full', animateEntrance && 'catalog-grid-enter')}
       style={{ '--stagger': staggerIndex } as CSSProperties}
     >
       <Link
         className="group block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        to={`/products/${product.id}`}
+        to={href}
         viewTransition
       >
         <Card className="h-full gap-3 pt-0 transition-shadow group-hover:shadow-md">
@@ -58,7 +67,7 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
               <img
                 alt=""
                 className={cn(
-                  'size-full object-contain p-4 transition-[transform,opacity] duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100',
+                  'size-full object-contain p-4 transition-[transform,opacity] duration-250 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100',
                   isLoaded ? 'opacity-100' : 'opacity-0',
                 )}
                 decoding="async"
@@ -72,7 +81,9 @@ export function ProductCard({ product, staggerIndex = 0 }: ProductCardProps) {
                 ref={handleImageRef}
                 src={imageSrc}
                 style={{
-                  viewTransitionName: productViewTransitionName(product.id),
+                  viewTransitionName: isTransitioning
+                    ? productViewTransitionName(product.id)
+                    : 'none',
                 }}
               />
             </AspectRatio>

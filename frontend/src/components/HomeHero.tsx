@@ -11,8 +11,8 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon';
 import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon';
 import CallIcon from '@hugeicons/core-free-icons/CallIcon';
-import MonitorPauseIcon from '@hugeicons/core-free-icons/MonitorPauseIcon';
-import MonitorPlayIcon from '@hugeicons/core-free-icons/MonitorPlayIcon';
+import PauseIcon from '@hugeicons/core-free-icons/PauseIcon';
+import PlayIcon from '@hugeicons/core-free-icons/PlayIcon';
 import WhatsappIcon from '@hugeicons/core-free-icons/WhatsappIcon';
 import { HERO_COPY, HERO_SLIDES } from '@/constants/hero';
 import { STORE_PHONE_HREF } from '@/constants/store';
@@ -22,14 +22,19 @@ import { cn } from '@/lib/utils';
 // 44px hit area for the carousel controls.
 const CONTROL_CLASSES = 'size-11';
 const CTA_CLASSES = 'h-11 gap-2 px-5 text-sm';
+const AUTOPLAY_DELAY_MS = 6000;
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 export function HomeHero() {
   const whatsAppHref = buildWhatsAppContactUrl();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isPlaying, setIsPlaying] = useState(
-    () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    () => !window.matchMedia(REDUCED_MOTION_QUERY).matches,
   );
+  // Autoplay holds while keyboard focus is inside the hero or the tab is hidden.
+  const [hasFocusWithin, setHasFocusWithin] = useState(false);
+  const [isPageHidden, setIsPageHidden] = useState(() => document.hidden);
 
   const onSelect = useCallback(() => {
     if (!api) {
@@ -51,21 +56,49 @@ export function HomeHero() {
   }, [api, onSelect]);
 
   useEffect(() => {
-    if (!api || !isPlaying) {
+    const query = window.matchMedia(REDUCED_MOTION_QUERY);
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setIsPlaying(false);
+      }
+    };
+
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    const onVisibilityChange = () => setIsPageHidden(document.hidden);
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () =>
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, []);
+
+  // A timeout keyed on `current` restarts the countdown after every slide change,
+  // so a manual skip always gets the full delay before the next auto-advance.
+  useEffect(() => {
+    if (!api || !isPlaying || hasFocusWithin || isPageHidden) {
       return;
     }
 
-    const interval = window.setInterval(() => {
+    const timeout = window.setTimeout(() => {
       api.scrollNext();
-    }, 6000);
+    }, AUTOPLAY_DELAY_MS);
 
-    return () => window.clearInterval(interval);
-  }, [api, isPlaying]);
+    return () => window.clearTimeout(timeout);
+  }, [api, current, isPlaying, hasFocusWithin, isPageHidden]);
 
   return (
     <section
       aria-label="Destacados"
-      className="relative -mt-16 flex min-h-[min(85vh,720px)] flex-col"
+      className="relative -mt-16 flex min-h-[min(85svh,720px)] flex-col"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setHasFocusWithin(false);
+        }
+      }}
+      onFocus={() => setHasFocusWithin(true)}
     >
       <div className="relative flex-1">
         <Carousel
@@ -76,7 +109,7 @@ export function HomeHero() {
           <CarouselContent className="ml-0 h-full">
             {HERO_SLIDES.map((slide, index) => (
               <CarouselItem className="pl-0" key={slide.src}>
-                <div className="relative h-[min(85vh,720px)] w-full">
+                <div className="relative h-[min(85svh,720px)] w-full">
                   <img
                     alt={slide.alt}
                     className="size-full object-cover"
@@ -84,6 +117,7 @@ export function HomeHero() {
                     fetchPriority={index === 0 ? 'high' : 'auto'}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     src={slide.src}
+                    style={{ objectPosition: slide.position }}
                   />
                   {/* Scrim: darkest where the copy sits, light at the top for the header. */}
                   <div
@@ -208,7 +242,7 @@ export function HomeHero() {
           variant="ghost"
         >
           <HugeiconsIcon
-            icon={isPlaying ? MonitorPauseIcon : MonitorPlayIcon}
+            icon={isPlaying ? PauseIcon : PlayIcon}
             strokeWidth={2}
           />
         </Button>

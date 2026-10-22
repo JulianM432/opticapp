@@ -19,6 +19,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { Spinner } from '@/components/ui/spinner';
+import { StoreLogo } from '@/components/StoreLogo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { getApiErrorMessage } from '@/api/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -59,7 +60,7 @@ export function LoginPage() {
       <main className="flex flex-1 items-center justify-center px-4 py-10">
         <Card className="w-full max-w-md">
           <CardHeader className="flex flex-col items-center gap-4 text-center">
-            <img alt="Opticapp" className="size-10" src="/logo.svg" />
+            <StoreLogo className="size-10" />
             <div className="flex flex-col gap-1">
               <CardTitle>Panel de administración</CardTitle>
               <CardDescription>

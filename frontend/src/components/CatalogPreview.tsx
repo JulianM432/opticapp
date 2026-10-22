@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import AlertCircleIcon from '@hugeicons/core-free-icons/AlertCircleIcon';
 import SunglassesIcon from '@hugeicons/core-free-icons/SunglassesIcon';
+import { CatalogError } from '@/components/CatalogError';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductGridSkeleton } from '@/components/ProductGridSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -16,7 +15,7 @@ import {
 import { useProducts } from '@/hooks/useProducts';
 
 export function CatalogPreview() {
-  const { data, isLoading, error, refetch } = useProducts(1, 4);
+  const { data, isLoading, isFromCache, error, refetch } = useProducts(1, 4);
 
   return (
     <section
@@ -40,24 +39,7 @@ export function CatalogPreview() {
       <div aria-live="polite" className="min-h-64">
         {isLoading && <ProductGridSkeleton count={4} />}
 
-        {!isLoading && error && (
-          <Alert variant="destructive">
-            <HugeiconsIcon icon={AlertCircleIcon} strokeWidth={2} />
-            <AlertTitle>No pudimos cargar el catálogo</AlertTitle>
-            <AlertDescription className="flex flex-col gap-3">
-              <span>{error}</span>
-              <Button
-                className="w-fit"
-                onClick={refetch}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                Reintentar
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
+        {!isLoading && error && <CatalogError onRetry={refetch} />}
 
         {!isLoading && data && data.total === 0 && (
           <Empty className="border border-dashed border-border/80 py-16">
@@ -81,6 +63,7 @@ export function CatalogPreview() {
                 key={product.id}
                 product={product}
                 staggerIndex={index}
+                animateEntrance={!isFromCache}
               />
             ))}
           </div>
