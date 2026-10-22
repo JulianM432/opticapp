@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { HugeiconsIcon } from '@hugeicons/react';
+import WhatsappIcon from '@hugeicons/core-free-icons/WhatsappIcon';
 import { StoreLogo } from '@/components/StoreLogo';
 import { cn } from '@/lib/utils';
 import { STORE_INFO } from '@/constants/store';
+import { buildWhatsAppContactUrl } from '@/helpers/whatsapp';
 
 const navLinkClassName =
   'inline-flex h-11 items-center rounded-md px-2 text-sm font-medium transition-colors sm:px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -29,6 +32,13 @@ export function PublicHeader() {
   }, [isHome]);
 
   const isTransparent = isHome && !isScrolled;
+  const whatsAppHref = buildWhatsAppContactUrl();
+  const plainLinkClassName = cn(
+    navLinkClassName,
+    isTransparent
+      ? 'text-on-media/90 hover:text-on-media'
+      : 'text-muted-foreground hover:text-foreground',
+  );
 
   return (
     <header
@@ -69,20 +79,32 @@ export function PublicHeader() {
               )
             }
             to="/catalogo"
+            viewTransition
           >
             Catálogo
           </NavLink>
-          <a
-            className={cn(
-              navLinkClassName,
-              isTransparent
-                ? 'text-on-media/90 hover:text-on-media'
-                : 'text-muted-foreground hover:text-foreground',
-            )}
-            href="#contacto"
-          >
+          <a className={plainLinkClassName} href="#contacto">
             Contacto
           </a>
+          {whatsAppHref && (
+            <a
+              aria-label="Escribinos por WhatsApp"
+              className={cn(
+                plainLinkClassName,
+                'w-11 justify-center px-0 sm:px-0',
+              )}
+              href={whatsAppHref}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <HugeiconsIcon
+                aria-hidden="true"
+                className="size-5"
+                icon={WhatsappIcon}
+                strokeWidth={2}
+              />
+            </a>
+          )}
         </nav>
       </div>
     </header>
